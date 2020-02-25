@@ -6,6 +6,11 @@ import {
   reducer as ProductReducer,
 } from './product';
 
+import { 
+  saga as OrderSaga,
+  reducer as OrderReducer,
+} from './order';
+
 import {
   saga as ProfileSaga,
   reducer as ProfileReducer,
@@ -19,6 +24,7 @@ import {
 export function* rootSaga() {
   yield all([
     ...ProductSaga,
+    ...OrderSaga,
     ...ProfileSaga,
     ...AuthSaga,
   ])
@@ -26,6 +32,7 @@ export function* rootSaga() {
 
 export const rootReducer = combineReducers({
   product: ProductReducer,
+  order: OrderReducer,
   profile: ProfileReducer,
   auth: AuthReducer,
 })

@@ -11,6 +11,7 @@ import withWrapper from '../../hoc/withWrapper';
 
 import { LoginContainer } from '../../styles/layout'
 
+import Loading from '../Loading';
 import SellProductItem from './view/SellProductItem';
 import OrderPanel from './view/CheckProduct';
 
@@ -81,7 +82,7 @@ export default compose(
 
     if(isEmpty(product)) {
       return(
-        <div>Empty</div>
+        <Loading />
       )
     }
 
