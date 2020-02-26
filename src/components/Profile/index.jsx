@@ -21,7 +21,7 @@ const SectionInput = styled.input`
 
 const Profile = (props) => {
   const { localProfile, setLocalProfile, isEdit } = props;
-  const { email, name, password, location } = localProfile;
+  const { email, name, location } = localProfile;
 
   const changeEmailHandler = (e) => {
     setLocalProfile({
@@ -37,12 +37,12 @@ const Profile = (props) => {
     })
   }
 
-  const changePasswordHandler = (e) => {
-    setLocalProfile({
-      ...localProfile,
-      password: e.target.value,
-    })
-  }
+  // const changePasswordHandler = (e) => {
+  //   setLocalProfile({
+  //     ...localProfile,
+  //     password: e.target.value,
+  //   })
+  // }
 
   const changeLocationHandler = (e) => {
     setLocalProfile({
@@ -78,13 +78,13 @@ const Profile = (props) => {
           onChange={changeNameHandler}
         />
       </SectionWrapper>
-      <SectionWrapper>
+      {/* <SectionWrapper>
         <SectionTitle>Password</SectionTitle>
         <SectionInput 
           value={password}
           onChange={changePasswordHandler}
         />
-      </SectionWrapper>
+      </SectionWrapper> */}
       <SectionWrapper>
         <SectionTitle>Location</SectionTitle>
         <SectionInput 

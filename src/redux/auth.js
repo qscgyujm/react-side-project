@@ -1,28 +1,34 @@
-import { takeLatest, call, put, delay } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 
-// import API from '../api/index';
+import * as API from '../api/index';
 
 // State
 const initialState = {
-  isAuth: true,
+  isAuth: false,
   isFetch: false,
   isError: false,
 }
 
 //  Action
 const ActionType = {
-  FETCH_AUTH_REQUEST: 'FETCH_AUTH_REQUEST',
-  FETCH_AUTH_SUCCESS: 'FETCH_AUTH_SUCCESS',
-  FETCH_AUTH_FAILURE: 'FETCH_AUTH_FAILURE',
+  CHECK_AUTH_REQUEST: 'CHECK_AUTH_REQUEST',
+  CHECK_AUTH_SUCCESS: 'CHECK_AUTH_SUCCESS',
+  CHECK_AUTH_FAILURE: 'CHECK_AUTH_FAILURE',
+  LOGIN_AUTH_REQUEST: 'LOGIN_AUTH_REQUEST',
+  LOGIN_AUTH_SUCCESS: 'LOGIN_AUTH_SUCCESS',
+  LOGIN_AUTH_FAILURE: 'LOGIN_AUTH_FAILURE',
   LOGOUT_AUTH_REQUEST: 'LOGOUT_AUTH_REQUEST',
   LOGOUT_AUTH_SUCCESS: 'LOGOUT_AUTH_SUCCESS',
   LOGOUT_AUTH_FAILURE: 'LOGOUT_AUTH_FAILURE',
 }
 
 export const action = {
-  fetchAuth: () => ({type: ActionType.FETCH_AUTH_REQUEST}),
-  fetchAuthSuccess: (product) => ({type: ActionType.FETCH_AUTH_SUCCESS, payload: product }),
-  fetchAuthFailure: () => ({type: ActionType.FETCH_AUTH_FAILURE}),
+  checkAuth: () => ({type: ActionType.CHECK_AUTH_REQUEST}),
+  checkAuthSuccess: () => ({type: ActionType.CHECK_AUTH_SUCCESS}),
+  checkAuthFailure: () => ({type: ActionType.CHECK_AUTH_FAILURE}),
+  loginAuth: (body) => ({type: ActionType.LOGIN_AUTH_REQUEST, payload: body}),
+  loginAuthSuccess: () => ({type: ActionType.LOGIN_AUTH_SUCCESS}),
+  loginAuthFailure: () => ({type: ActionType.LOGIN_AUTH_FAILURE}),
   logoutAuth: () => ({type: ActionType.LOGOUT_AUTH_REQUEST}),
   logoutAuthSuccess: () => ({type: ActionType.LOGOUT_AUTH_SUCCESS}),
   logoutAuthFailure: () => ({type: ActionType.LOGOUT_AUTH_FAILURE}),
@@ -30,16 +36,49 @@ export const action = {
 
 // Saga
 
-function* fetchAuthSaga() {
+function* checkAuthSaga() {
   try {
-    yield put(action.fetchAuthSuccess());
+    const oldToken = localStorage.getItem('token');
+
+    if(!oldToken){
+      throw new Error('error');
+    }
+
+    const response = yield call(API.checkAuth, oldToken);
+    const { headers } = response;
+    const { token: newToken } = headers;
+    localStorage.setItem('token', newToken);
+
+    yield put(action.checkAuthSuccess());
   } catch (error) {
-    yield put(action.fetchAuthFailure());
+    yield put(action.checkAuthFailure());
+  }
+}
+
+function* loginAuthSaga(input) {
+  try {
+    const { payload } = input;
+    
+    const response = yield call(API.postLogin, payload);
+    const { data, headers } = response;
+    const { token } = headers;
+    
+    
+    if(!token) {
+      throw new Error('no token');
+    } else {
+      localStorage.setItem('token', token)
+      yield put(action.loginAuthSuccess());
+    }
+  } catch (error) {
+    yield put(action.loginAuthFailure());
   }
 }
 
 function* logoutAuthSaga() {
   try {
+    localStorage.removeItem('token');
+
     yield put(action.logoutAuthSuccess());
   } catch (error) {
     yield put(action.logoutAuthFailure());
@@ -47,7 +86,8 @@ function* logoutAuthSaga() {
 }
 
 export const saga = [
-  takeLatest(ActionType.FETCH_AUTH_REQUEST, fetchAuthSaga),
+  takeLatest(ActionType.CHECK_AUTH_REQUEST, checkAuthSaga),
+  takeLatest(ActionType.LOGIN_AUTH_REQUEST, loginAuthSaga),
   takeLatest(ActionType.LOGOUT_AUTH_REQUEST, logoutAuthSaga),
 ];
 
@@ -55,22 +95,39 @@ export const saga = [
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.FETCH_AUTH_REQUEST:
+    case ActionType.CHECK_AUTH_REQUEST:
       return {
         ...state,
         isFetch: true,
       };
-    case ActionType.FETCH_AUTH_FAILURE:
+    case ActionType.CHECK_AUTH_FAILURE:
       return {
         ...state,
-        isError: true,
+        isFetch: false,
+        isAuth: false,
       };
-    case ActionType.FETCH_AUTH_SUCCESS:
+    case ActionType.CHECK_AUTH_SUCCESS:
       return {
         ...state,
         isFetch: false,
         isAuth: true,
       }
+      case ActionType.LOGIN_AUTH_REQUEST:
+        return {
+          ...state,
+          isFetch: true,
+        };
+      case ActionType.LOGIN_AUTH_FAILURE:
+        return {
+          ...state,
+          isError: true,
+        };
+      case ActionType.LOGIN_AUTH_SUCCESS:
+        return {
+          ...state,
+          isFetch: false,
+          isAuth: true,
+        }
     case ActionType.LOGOUT_AUTH_REQUEST:
       return {
         ...state,

@@ -8,9 +8,7 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose';
 import { bindActionCreators } from 'redux';
 
-import { action as productAction } from '../redux/product';
 import { action as authAction } from '../redux/auth';
-
 
 import ProtectLoginRoute from '../components/Protect/LoggedInRoute';
 import ProtectLogoutRoute from '../components/Protect/LoggedOutRoute';
@@ -24,6 +22,13 @@ import EditProfile from '../components/EditProfile'
 import GlobalStyle from '../styles/global';
 
 function App(props) {
+  console.log('App', props);
+  const { checkAuth } = props;
+
+  React.useEffect(() => {
+    checkAuth();
+  }, [checkAuth])
+
   return (
     <Router>
       <GlobalStyle />
@@ -47,17 +52,13 @@ const mapStateToProps = (state) => {
 // // }
 
 const mapDispatchToProps = (dispatch) => {
-  const { 
-    fetchProduct,
-  } = productAction;
   const {
-    fetchAuth,
+    checkAuth,
   } = authAction;
 
   return{
     ...bindActionCreators({
-      fetchProduct,
-      fetchAuth,
+      checkAuth,
     }, dispatch),
   }
 }

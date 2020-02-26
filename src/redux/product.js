@@ -1,6 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 
-import API from '../api/index';
+import * as API from '../api/index';
 
 // State
 const initialState = {

@@ -79,13 +79,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   const {
-    fetchAuth,
     logoutAuth,
   } = authAction;
 
   return{
     ...bindActionCreators({
-      fetchAuth,
       logoutAuth,
     }, dispatch),
   }

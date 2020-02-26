@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { compose } from 'recompose';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
+import { every } from 'lodash';
 
 import { action as authAction } from '../../redux/auth';
 
@@ -115,11 +116,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const {
     fetchAuth,
+    loginAuth,
   } = authAction;
 
   return{
     ...bindActionCreators({
       fetchAuth,
+      loginAuth,
     }, dispatch),
   }
 }
@@ -160,9 +163,14 @@ export default compose(
     }
 
     const clickConfirmHandler = () => {
-      const { fetchAuth } = props;
+      
+      const { loginAuth } = props;
 
-      fetchAuth();
+      if(!every(localState)) {
+        return;
+      }
+
+      loginAuth(localState);
     }
 
 
