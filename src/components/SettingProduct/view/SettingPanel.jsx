@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 import { compose } from 'recompose';
+import { pick, every } from 'lodash';
 
 import { SectionWrapper } from '../style/layout';
 import { Button } from '../style/unit';
@@ -57,7 +58,6 @@ const ProductPanel = (props) => {
 
 export default compose(
   (BaseComponent) => (props) => {
-    const { localState } = props;
     const [isEdit, setIsEdit] =React.useState(false);
 
     const clickCancelButtonHandler = () => {
@@ -69,7 +69,19 @@ export default compose(
     }
 
     const clickUpdatedButtonHandler = () => {
-      console.log(localState)
+      const { localState, updateProduct } = props;
+      console.log(localState);
+
+      const updatedProduct = pick(localState, ['name', 'price']);
+
+      if(
+        every(updatedProduct)
+        && updatedProduct.price < 1
+      ) {
+        return;
+      }
+
+      updateProduct(localState);
     }
 
     if(isEdit) {
@@ -77,7 +89,6 @@ export default compose(
         <>
           <EditPanel
             {...props}
-            clickCancelButtonHandler={clickCancelButtonHandler}
           />
           <ButtonWrapper>
             <EditButton onClick={clickCancelButtonHandler}>取消</EditButton>

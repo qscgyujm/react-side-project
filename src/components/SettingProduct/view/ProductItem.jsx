@@ -31,9 +31,9 @@ const Product = (props) => {
         imageUrl={localState.imageUrl}
       />
       <SettingPanel
+        {...props}
         localState={localState}
         setLocalState={setLocalState}
-        {...props}
       />
     </>
   )

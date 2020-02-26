@@ -134,7 +134,6 @@ export default compose(
   withWrapper(LogoutContainer),
   withWrapper(LoginWrapper),
   (BaseComponent) => (props) => {
-    console.log('login', props);
 
     const [localState, setLocalState] = React.useState({
       email: '',

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 import { compose } from 'recompose';
+import { pick, every } from 'lodash';
 
 import AddIconSrc from '../../../img/add.png';
 
@@ -70,7 +71,20 @@ export default compose(
     }
 
     const clickSaveButtonHandler = () => {
-      console.log(localState);
+      const { createProduct } = props;
+
+      const newProduct = pick(localState, ['name', 'price', 'imageUrl']);
+      
+      if(every(newProduct)) {
+        setLocalState({
+          name: '',
+          description: '',
+          price: 1,
+          imageUrl: '',
+        });
+      }
+
+      createProduct(localState);
     }
 
     if(!isCreate){

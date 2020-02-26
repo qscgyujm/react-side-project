@@ -1,5 +1,4 @@
 import React from 'react';
-// import styled from 'styled-components';
 import {
   BrowserRouter as Router,
   Switch,
@@ -23,11 +22,7 @@ import GlobalStyle from '../styles/global';
 
 function App(props) {
   console.log('App', props);
-  const { checkAuth } = props;
-
-  React.useEffect(() => {
-    checkAuth();
-  }, [checkAuth])
+  // const { checkAuth } = props;
 
   return (
     <Router>

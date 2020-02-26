@@ -19,12 +19,12 @@ const ProductWrapper = styled.div`
 `;
 
 const SettingProduct = (props) => {
-  const { product: products } = props;;
+  const { productList } = props;;
 
   return (
     <>
       {
-        products.map((product, i) => {
+        productList.map((product, i) => {
           return(
             <SettingProductItem
               key={i}
@@ -34,7 +34,9 @@ const SettingProduct = (props) => {
           )
         })
       }
-      <CreateProduct />
+      <CreateProduct 
+        {...props}
+      />
     </>
   )
 }
@@ -46,11 +48,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const {
     fetchProduct,
+    createProduct,
+    updateProduct,
   } = productAction;
 
   return{
     ...bindActionCreators({
       fetchProduct,
+      createProduct,
+      updateProduct,
     }, dispatch),
   }
 }
@@ -60,18 +66,19 @@ export default compose(
   withWrapper(LoginContainer),
   withWrapper(ProductWrapper),
   (BaseComponent) => (props) => {
-    const { product, fetchProduct } = props
+    const { productList, fetchProduct } = props
 
     React.useEffect(
       () => {
-        if(isEmpty(product)) {
+        if(isEmpty(productList)) {
           fetchProduct();
         }
       },
-      [fetchProduct, product],
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
     )
 
-    if(isEmpty(product)) {
+    if(isEmpty(productList)) {
       return(
         <div>Empty</div>
       )

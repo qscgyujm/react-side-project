@@ -21,14 +21,14 @@ const ConfirmButton = styled(Button)`
 `;
 
 const CheckoutPanel = (props) => {
-  const { localOrder, products } = props;
+  const { localOrder, productList } = props;
 
   const totalPrice = React.useMemo(() => {
     return localOrder.reduce((acc, order) => {
-      const price = products.find(product => product.p_id === order.id).price;
+      const price = productList.find(product => product.p_id === order.id).price;
       return acc + price * order.count;
     }, 0);
-  }, [localOrder, products])
+  }, [localOrder, productList])
 
   return (
     <OrderWrapper>

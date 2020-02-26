@@ -4,7 +4,7 @@ import * as API from '../api/index';
 
 // State
 const initialState = {
-  isAuth: false,
+  isAuth: true,
   isFetch: false,
   isError: false,
 }
@@ -37,6 +37,7 @@ export const action = {
 // Saga
 
 function* checkAuthSaga() {
+  console.log('check Auth');
   try {
     const oldToken = localStorage.getItem('token');
 
@@ -45,6 +46,8 @@ function* checkAuthSaga() {
     }
 
     const response = yield call(API.checkAuth, oldToken);
+    console.log('response', response);
+
     const { headers } = response;
     const { token: newToken } = headers;
     localStorage.setItem('token', newToken);
@@ -62,12 +65,11 @@ function* loginAuthSaga(input) {
     const response = yield call(API.postLogin, payload);
     const { data, headers } = response;
     const { token } = headers;
-    
-    
+
     if(!token) {
       throw new Error('no token');
     } else {
-      localStorage.setItem('token', token)
+      localStorage.setItem('token', token);
       yield put(action.loginAuthSuccess());
     }
   } catch (error) {

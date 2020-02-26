@@ -20,7 +20,7 @@ const ProductWrapper = styled.div`
 `;
 
 const SellProductTable = (props) => {
-  const { product: products } = props;;
+  const { productList } = props;;
 
   const [localOrder, setLocalOrder] = React.useState([]);
 
@@ -28,11 +28,11 @@ const SellProductTable = (props) => {
     <>
       <OrderPanel 
         localOrder={localOrder}
-        products={products}
+        productList={productList}
       />
       <ProductWrapper>
         {
-          products.map((product, i) => {
+          productList.map((product, i) => {
             return(
               <SellProductItem
                 key={i}
@@ -69,18 +69,19 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withWrapper(LoginContainer),
   (BaseComponent) => (props) => {
-    const { product, fetchProduct } = props;
+    const { productList, fetchProduct } = props;
 
     React.useEffect(
       () => {
-        if(isEmpty(product)) {
+        if(isEmpty(productList)) {
           fetchProduct();
         }
       },
-      [fetchProduct, product],
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
     )
 
-    if(isEmpty(product)) {
+    if(isEmpty(productList)) {
       return(
         <Loading />
       )
