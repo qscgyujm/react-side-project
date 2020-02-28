@@ -81,7 +81,12 @@ export default compose(
         return;
       }
 
-      updateProduct(localState);
+      const updatedId = localState.p_id;
+      const updatedBody = pick(localState, ['name', 'description', 'price', 'imageUrl']);
+
+      const resolve = () => setIsEdit(false);
+    
+      updateProduct(updatedId, updatedBody, resolve);
     }
 
     if(isEdit) {

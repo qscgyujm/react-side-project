@@ -10,6 +10,7 @@ import SettingPanel from './SettingPanel';
 const ProductContainer = styled.div`
   width: 25%;
   padding: 10px;
+  box-sizing: border-box;
 `;
 
 const ProductWrapper = styled.div`

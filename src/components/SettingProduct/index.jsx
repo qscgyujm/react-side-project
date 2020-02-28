@@ -16,11 +16,13 @@ import CreateProduct from './view/CreateProduct';
 
 const ProductWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const SettingProduct = (props) => {
   const { productList } = props;;
 
+  console.log('productList', productList);
   return (
     <>
       {

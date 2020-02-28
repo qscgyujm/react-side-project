@@ -26,10 +26,10 @@ export const action = {
   fetchProduct: () => ({type: ActionType.FETCH_PRODUCT_REQUEST}),
   fetchProductSuccess: (productList) => ({type: ActionType.FETCH_PRODUCT_SUCCESS, payload: productList }),
   fetchProductFailure: () => ({type: ActionType.FETCH_PRODUCT_FAILURE}),
-  createProduct: (product) => ({type: ActionType.CREATE_PRODUCT_REQUEST, payload: product}),
+  createProduct: (body, resolve) => ({type: ActionType.CREATE_PRODUCT_REQUEST, payload: { body: body, resolve: resolve }}),
   createProductSuccess: (productList) => ({type: ActionType.CREATE_PRODUCT_SUCCESS, payload: productList}),
   createProductFailure: () => ({type: ActionType.CREATE_PRODUCT_FAILURE}),
-  updateProduct: (product) => ({type: ActionType.UPDATE_PRODUCT_REQUEST, payload: product}),
+  updateProduct: (id, body, resolve) => ({type: ActionType.UPDATE_PRODUCT_REQUEST, payload: { id: id, body: body, resolve: resolve }}),
   updateProductSuccess: (productList) => ({type: ActionType.UPDATE_PRODUCT_SUCCESS, payload: productList }),
   updateProductFailure: () => ({type: ActionType.UPDATE_PRODUCT_FAILURE}),
 }
@@ -48,27 +48,46 @@ function* fetchProductSaga() {
   }
 }
 
-function* createProductSaga(payload) {
+function* createProductSaga({ payload }) {
   try {
     const token = localStorage.getItem('token');
     
     console.log('create product', payload);
+    const { resolve } = payload;
 
+    const { data } = yield call(API.createProduct, { ...payload, token});
+    const { productList } = data;
+    console.log('create product', data);
+
+    // if(resolve){
+    //   resolve();
+    // }
     
-    yield put(action.createProductSuccess());
+    
+    yield put(action.createProductSuccess(productList));
   } catch (error) {
     yield put(action.createProductFailure());
   }
 }
 
-function* updateProductSaga(payload) {
+function* updateProductSaga({ payload }) {
   try {
     const token = localStorage.getItem('token');
     
-    console.log('update product', payload);
+    console.log('update product',  payload);
+
+    const { resolve } = payload;
+    const { data } = yield call(API.updateProduct, { ...payload, token});
+    const { productList } = data;
+    console.log('update product', data);
+
+    if(resolve) {
+      console.log('resolve');
+      resolve();
+    }
 
     // const { data } = yield call(API.getProductList, token);
-    yield put(action.updateProductSuccess());
+    yield put(action.updateProductSuccess(productList));
   } catch (error) {
     yield put(action.updateProductFailure());
   }
@@ -115,7 +134,7 @@ export const reducer = (state = initialState, action) => {
     case ActionType.CREATE_PRODUCT_SUCCESS:
       return {
         ...state,
-        // productList: action.payload,
+        productList: action.payload,
         isFetch: false,
       }
     case ActionType.UPDATE_PRODUCT_REQUEST:
@@ -132,7 +151,7 @@ export const reducer = (state = initialState, action) => {
     case ActionType.UPDATE_PRODUCT_SUCCESS:
       return {
         ...state,
-        // productList: action.payload,
+        productList: action.payload,
         isFetch: false,
       }
     default:

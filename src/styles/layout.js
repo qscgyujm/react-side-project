@@ -17,8 +17,7 @@ export const LogoutContainer = styled(Wrapper)`
 `
 
 export const LoginContainer = styled.div`
-  margin: 0 50px;
-  padding: 15px 15px 0;
+  margin: 15px 50px 0;
   background-color: #cfe1e6;
   min-height: calc(100vh - 50px);
 

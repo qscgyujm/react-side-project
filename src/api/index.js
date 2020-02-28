@@ -28,12 +28,24 @@ export const getProductList = (token) => {
     }
   });
 }
-export const createProduct = (product) => apiRoot.post('/product', product);
-export const updateProduct = ({id, product, token}) => apiRoot.put(`/product/${id}`, product, {
-  headers: {
-    Authorization: token,
-  }
-});
+export const createProduct = ({body, token}) => {
+  console.log('api', {body, token});
+  return apiRoot.post('/product/create', body, {
+    headers: {
+      Authorization: token,
+    }
+  });
+}
+
+export const updateProduct = ({id, body, token}) => {
+  console.log('api', {id, body, token});
+
+  return apiRoot.put(`/product/${id}`, body, {
+    headers: {
+      Authorization: token,
+    }
+  });
+}
 
 // Profile
 

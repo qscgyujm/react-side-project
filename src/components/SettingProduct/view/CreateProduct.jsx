@@ -73,7 +73,7 @@ export default compose(
     const clickSaveButtonHandler = () => {
       const { createProduct } = props;
 
-      const newProduct = pick(localState, ['name', 'price', 'imageUrl']);
+      const newProduct = pick(localState, ['name', 'price']);
       
       if(every(newProduct)) {
         setLocalState({
@@ -84,7 +84,9 @@ export default compose(
         });
       }
 
-      createProduct(localState);
+      const resolve = () => setLocalState(false);
+
+      createProduct(localState, resolve);
     }
 
     if(!isCreate){
