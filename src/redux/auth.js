@@ -4,7 +4,8 @@ import * as API from '../api/index';
 
 // State
 const initialState = {
-  isAuth: true,
+  isAuth: null,
+  isSend: false,
   isFetch: false,
   isError: false,
 }
@@ -20,6 +21,12 @@ const ActionType = {
   LOGOUT_AUTH_REQUEST: 'LOGOUT_AUTH_REQUEST',
   LOGOUT_AUTH_SUCCESS: 'LOGOUT_AUTH_SUCCESS',
   LOGOUT_AUTH_FAILURE: 'LOGOUT_AUTH_FAILURE',
+  SEND_VERIFY_CODE_REQUEST: 'SEND_VERIFY_CODE_REQUEST',
+  SEND_VERIFY_CODE_FAILURE: 'SEND_VERIFY_CODE_FAILURE',
+  SEND_VERIFY_CODE_SUCCESS: 'SEND_VERIFY_CODE_SUCCESS',
+  CHECK_VERIFY_CODE_REQUEST: 'CHECK_VERIFY_CODE_REQUEST',
+  CHECK_VERIFY_CODE_FAILURE: 'CHECK_VERIFY_CODE_FAILURE',
+  CHECK_VERIFY_CODE_SUCCESS: 'CHECK_VERIFY_CODE_SUCCESS',
 }
 
 export const action = {
@@ -32,6 +39,12 @@ export const action = {
   logoutAuth: () => ({type: ActionType.LOGOUT_AUTH_REQUEST}),
   logoutAuthSuccess: () => ({type: ActionType.LOGOUT_AUTH_SUCCESS}),
   logoutAuthFailure: () => ({type: ActionType.LOGOUT_AUTH_FAILURE}),
+  sendCode: (email) => ({type: ActionType.SEND_VERIFY_CODE_REQUEST, email}),
+  sendCodeSuccess: () => ({type: ActionType.SEND_VERIFY_CODE_SUCCESS}),
+  sendCodeFailure: () => ({type: ActionType.SEND_VERIFY_CODE_FAILURE}),
+  checkCode: (body) => ({type: ActionType.CHECK_AUTH_REQUEST, body}),
+  checkCodeSuccess: () => ({type: ActionType.CHECK_AUTH_SUCCESS}),
+  checkCodeFailure: () => ({type: ActionType.CHECK_AUTH_FAILURE}),
 }
 
 // Saga
@@ -45,12 +58,12 @@ function* checkAuthSaga() {
       throw new Error('error');
     }
 
-    const response = yield call(API.checkAuth, oldToken);
-    console.log('response', response);
+    // const response = yield call(API.checkAuth, oldToken);
+    // console.log('response', response);
 
-    const { headers } = response;
-    const { token: newToken } = headers;
-    localStorage.setItem('token', newToken);
+    // const { headers } = response;
+    // const { token: newToken } = headers;
+    // localStorage.setItem('token', newToken);
 
     yield put(action.checkAuthSuccess());
   } catch (error) {
@@ -87,10 +100,32 @@ function* logoutAuthSaga() {
   }
 }
 
+function* sendCodeSaga(payload) {
+  try {
+    
+
+    yield put(action.sendCodeSuccess());
+  } catch (error) {
+    yield put(action.sendCodeFailure());
+  }
+}
+
+function* checkCodeSaga(payload) {
+  try {
+    
+
+    yield put(action.checkCodeSuccess());
+  } catch (error) {
+    yield put(action.checkCodeFailure());
+  }
+}
+
 export const saga = [
   takeLatest(ActionType.CHECK_AUTH_REQUEST, checkAuthSaga),
   takeLatest(ActionType.LOGIN_AUTH_REQUEST, loginAuthSaga),
   takeLatest(ActionType.LOGOUT_AUTH_REQUEST, logoutAuthSaga),
+  takeLatest(ActionType.SEND_VERIFY_CODE_REQUEST, sendCodeSaga),
+  takeLatest(ActionType.CHECK_VERIFY_CODE_REQUEST, checkCodeSaga),
 ];
 
 // Reducer
@@ -146,6 +181,37 @@ export const reducer = (state = initialState, action) => {
         isFetch: false,
         isAuth: false,
       }
+      case ActionType.SEND_VERIFY_CODE_REQUEST:
+        return {
+          ...state,
+          isFetch: true,
+        };
+      case ActionType.SEND_VERIFY_CODE_FAILURE:
+        return {
+          ...state,
+          isError: true,
+        };
+      case ActionType.SEND_VERIFY_CODE_SUCCESS:
+        return {
+          ...state,
+          isFetch: false,
+          isSend: true,
+        }
+        case ActionType.CHECK_VERIFY_CODE_REQUEST:
+          return {
+            ...state,
+            isFetch: true,
+          };
+        case ActionType.CHECK_VERIFY_CODE_FAILURE:
+          return {
+            ...state,
+            isError: true,
+          };
+        case ActionType.CHECK_VERIFY_CODE_SUCCESS:
+          return {
+            ...state,
+            isFetch: false,
+          }
     default:
       return state;
   }

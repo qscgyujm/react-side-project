@@ -49,9 +49,29 @@ export const updateProduct = ({id, body, token}) => {
 
 // Profile
 
-export const getTestProfile = () => apiRoot.get('/test/user');
-export const getProfile = () => apiRoot.get('/user');
-export const updateProfile = () => apiRoot.post('/user');
+export const getProfile = (token) => {
+  return apiRoot.get('/user', {
+    headers: {
+      Authorization: token,
+    }
+  });
+}
+export const updateProfile = ({profile, token}) => {
+  // console.log(profile, token);
+  return apiRoot.put('/user/profile', profile, {
+    headers: {
+      Authorization: token,
+    }
+  });
+}
+
+export const updateProfilePassword = ({passwordObj, token}) => {
+  return apiRoot.post('/user/password', passwordObj, {
+    headers: {
+      Authorization: token,
+    }
+  })
+}
 
 // Order
 

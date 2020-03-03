@@ -1,11 +1,9 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import { connect } from 'react-redux'
 import { compose } from 'recompose';
 import { bindActionCreators } from 'redux';
+import { isNil } from 'lodash';
 
 import { action as authAction } from '../redux/auth';
 
@@ -22,7 +20,15 @@ import GlobalStyle from '../styles/global';
 
 function App(props) {
   console.log('App', props);
-  // const { checkAuth } = props;
+  const { isAuth, checkAuth } = props;
+
+  React.useEffect(() => {
+    if(isNil(isAuth)){
+      checkAuth();
+    }},
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <Router>

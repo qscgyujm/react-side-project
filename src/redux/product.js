@@ -20,6 +20,9 @@ const ActionType = {
   UPDATE_PRODUCT_REQUEST: 'UPDATE_PRODUCT_REQUEST',
   UPDATE_PRODUCT_SUCCESS: 'UPDATE_PRODUCT_SUCCESS',
   UPDATE_PRODUCT_FAILURE: 'UPDATE_PRODUCT_FAILURE',
+  DELETE_PRODUCT_REQUEST: 'DELETE_PRODUCT_REQUEST',
+  DELETE_PRODUCT_SUCCESS: 'DELETE_PRODUCT_SUCCESS',
+  DELETE_PRODUCT_FAILURE: 'DELETE_PRODUCT_FAILURE',
 }
 
 export const action = {
@@ -32,6 +35,9 @@ export const action = {
   updateProduct: (id, body, resolve) => ({type: ActionType.UPDATE_PRODUCT_REQUEST, payload: { id: id, body: body, resolve: resolve }}),
   updateProductSuccess: (productList) => ({type: ActionType.UPDATE_PRODUCT_SUCCESS, payload: productList }),
   updateProductFailure: () => ({type: ActionType.UPDATE_PRODUCT_FAILURE}),
+  deleteProduct: () => ({type: ActionType.DELETE_PRODUCT_REQUEST}),
+  deleteProductSuccess: (productList) => ({type: ActionType.DELETE_PRODUCT_SUCCESS, payload: productList}),
+  deleteProductFailure: () => ({type: ActionType.DELETE_PRODUCT_FAILURE}),
 }
 
 // Saga
@@ -63,7 +69,6 @@ function* createProductSaga({ payload }) {
     //   resolve();
     // }
     
-    
     yield put(action.createProductSuccess(productList));
   } catch (error) {
     yield put(action.createProductFailure());
@@ -93,10 +98,19 @@ function* updateProductSaga({ payload }) {
   }
 }
 
+function* deleteProductSaga({}) {
+  try {
+    yield put(action.deleteProductSuccess());
+  } catch (error) {
+    yield put(action.deleteProductFailure());
+  }
+}
+
 export const saga = [
   takeLatest(ActionType.FETCH_PRODUCT_REQUEST, fetchProductSaga),
   takeLatest(ActionType.CREATE_PRODUCT_REQUEST, createProductSaga),
   takeLatest(ActionType.UPDATE_PRODUCT_REQUEST, updateProductSaga),
+  takeLatest(ActionType.DELETE_PRODUCT_REQUEST, deleteProductSaga),
 ];
 
 // Reducer

@@ -17,6 +17,7 @@ import OrderPanel from './view/CheckProduct';
 
 const ProductWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const SellProductTable = (props) => {

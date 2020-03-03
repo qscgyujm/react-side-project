@@ -1,6 +1,6 @@
-import { takeLatest, call, put, delay } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 
-// import API from '../api/index';
+import * as API from '../api/index';
 
 // State
 const initialState = {
@@ -17,6 +17,12 @@ const ActionType = {
   CREATE_PROFILE_REQUEST: 'CREATE_PROFILE_REQUEST',
   CREATE_PROFILE_SUCCESS: 'CREATE_PROFILE_SUCCESS',
   CREATE_PROFILE_FAILURE: 'CREATE_PROFILE_FAILURE',
+  UPDATE_PROFILE_REQUEST: 'UPDATE_PROFILE_REQUEST',
+  UPDATE_PROFILE_SUCCESS: 'UPDATE_PROFILE_SUCCESS',
+  UPDATE_PROFILE_FAILURE: 'UPDATE_PROFILE_FAILURE',
+  UPDATE_PROFILE_PASSWORD_REQUEST: 'UPDATE_PROFILE_PASSWORD_REQUEST',
+  UPDATE_PROFILE_PASSWORD_SUCCESS: 'UPDATE_PROFILE_PASSWORD_SUCCESS',
+  UPDATE_PROFILE_PASSWORD_FAILURE: 'UPDATE_PROFILE_PASSWORD_FAILURE',
 }
 
 export const action = {
@@ -24,22 +30,30 @@ export const action = {
   createProfileFailure: () => ({type: ActionType.CREATE_PROFILE_FAILURE}),
   createProfileSuccess: () => ({type: ActionType.CREATE_PROFILE_SUCCESS}),
   fetchProfile: () => ({type: ActionType.FETCH_PROFILE_REQUEST}),
-  fetchProfileFailure: (profile) => ({type: ActionType.FETCH_PROFILE_FAILURE, profile}),
+  fetchProfileFailure: () => ({type: ActionType.FETCH_PROFILE_FAILURE}),
   fetchProfileSuccess: (profile) => ({type: ActionType.FETCH_PROFILE_SUCCESS, payload: profile}),
+  updateProfile: (profile) => ({type: ActionType.UPDATE_PROFILE_REQUEST, profile}),
+  updateProfileFailure: () => ({type: ActionType.UPDATE_PROFILE_FAILURE}),
+  updateProfileSuccess: (profile) => ({type: ActionType.UPDATE_PROFILE_SUCCESS, payload: profile}),
+  updatePassword: (passwordObj, resolve) => ({type: ActionType.UPDATE_PROFILE_PASSWORD_REQUEST, passwordObj, resolve}),
+  updatePasswordFailure: () => ({type: ActionType.UPDATE_PROFILE_PASSWORD_FAILURE}),
+  updatePasswordSuccess: () => ({type: ActionType.UPDATE_PROFILE_PASSWORD_SUCCESS}),
 }
 
 // Saga
 
 function* fetchProfileSaga() {
   try {
-    yield put(action.fetchProfileSuccess({
-      email: 'test@gmail.com',
-      name: 'tes',
-      password: 'abc',
-      location: 'taiwan',
-    }));
+    const token = localStorage.getItem('token');
+
+    const { data } = yield call(API.getProfile, token);
+    const { profile } = data;
+    console.log('data', data, token);
+
+
+     yield put(action.fetchProfileSuccess(profile));
   } catch (error) {
-    yield put(action.FETCH_PROFILE_FAILURE());
+    yield put(action.fetchProfileFailure());
   }
 }
 
@@ -59,9 +73,42 @@ function* createProfileSaga(payload) {
   }
 }
 
+function* updateProfileSaga(payload) {
+  try {
+    const token = localStorage.getItem('token');
+
+    const { data } = yield call(API.updateProfile, {...payload, token})
+    const { profile } = data;
+
+    yield put(action.updateProfileSuccess(profile));
+  } catch (error) {
+    yield put(action.updateProfileFailure());
+  }
+}
+
+function* updateProfilePasswordSaga(payload) {
+  try {
+    console.log('updateProfilePasswordSaga', payload);
+    const token = localStorage.getItem('token');
+    const { passwordObj, resolve } = payload;
+
+    yield call(API.updateProfilePassword, {passwordObj, token})
+
+    if(resolve) {
+      resolve();
+    }
+
+    yield put(action.updatePasswordSuccess());
+  } catch (error) {
+    yield put(action.updateProfileFailure());
+  }
+}
+
 export const saga = [
   takeLatest(ActionType.FETCH_PROFILE_REQUEST, fetchProfileSaga),
   takeLatest(ActionType.CREATE_PROFILE_REQUEST, createProfileSaga),
+  takeLatest(ActionType.UPDATE_PROFILE_REQUEST, updateProfileSaga),
+  takeLatest(ActionType.UPDATE_PROFILE_PASSWORD_REQUEST, updateProfilePasswordSaga),
 ];
 
 // Reducer
@@ -97,6 +144,37 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         profile: {...action.payload},
+        isFetch: false,
+      }
+    case ActionType.UPDATE_PROFILE_REQUEST:
+      return {
+        ...state,
+        isFetch: true,
+      };
+    case ActionType.UPDATE_PROFILE_FAILURE:
+      return {
+        ...state,
+        isError: true,
+      };
+    case ActionType.UPDATE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        profile: {...action.payload},
+        isFetch: false,
+      }
+    case ActionType.UPDATE_PROFILE_PASSWORD_REQUEST:
+      return {
+        ...state,
+        isFetch: true,
+      };
+    case ActionType.UPDATE_PROFILE_PASSWORD_FAILURE:
+      return {
+        ...state,
+        isError: true,
+      };
+    case ActionType.UPDATE_PROFILE_PASSWORD_SUCCESS:
+      return {
+        ...state,
         isFetch: false,
       }
     default:

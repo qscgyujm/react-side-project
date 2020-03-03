@@ -12,8 +12,10 @@ import withWrapper from '../../hoc/withWrapper';
 
 import { LoginContainer } from '../../styles/layout'
 import { Button } from '../../styles/unit';
+import { Header } from './style/unit';
 
 import Profile from '../Profile/index'
+import Password from './view/Password';
 
 const EnhanceLoginContainer = styled(LoginContainer)`
   display: flex;
@@ -36,11 +38,18 @@ const ButtonWrapper = styled.div`
 `;
 
 const index = (props) => {
-  const { profile } = props;
+  const { 
+    profile,
+    isEdit,
+    setIsEdit,
+    clickEditProfileButtonHandler,
+    clickChangePasswordButtonHandler,
+  } = props;
   const [localProfile, setLocalProfile] = React.useState(profile);
 
   const clickCancelButtonHandler= () => {
     setLocalProfile(profile);
+    setIsEdit(false);
   }
 
   const clickSubmitButtonHandler= () => {
@@ -49,15 +58,29 @@ const index = (props) => {
 
   return (
     <>
+      <Header>
+        Edit Profile
+      </Header>
       <Profile
         localProfile={localProfile}
         setLocalProfile={setLocalProfile}
-        isEdit
+        isEdit={isEdit}
       />
-      <ButtonWrapper>
-        <Button onClick={clickCancelButtonHandler}>取消</Button>
-        <Button onClick={clickSubmitButtonHandler}>送出</Button>
-      </ButtonWrapper>
+      {
+        isEdit
+        ? (
+          <ButtonWrapper>
+            <Button onClick={clickCancelButtonHandler}>取消</Button>
+            <Button onClick={clickSubmitButtonHandler}>送出</Button>
+          </ButtonWrapper>
+        )
+        :(
+          <ButtonWrapper>
+            <Button onClick={clickEditProfileButtonHandler}>編輯個人資料</Button>
+            <Button onClick={clickChangePasswordButtonHandler}>修改密碼</Button>
+          </ButtonWrapper>
+        )
+      }
     </>
   )
 }
@@ -69,11 +92,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const {
     fetchProfile,
+    updatePassword,
   } = profileAction;
 
   return{
     ...bindActionCreators({
       fetchProfile,
+      updatePassword,
     }, dispatch),
   }
 }
@@ -84,7 +109,10 @@ export default compose(
   withWrapper(EditWrapper),
   (BaseComponent) => (props) => {
     console.log('setting Profile', props);
-    const { profile, fetchProfile } = props;
+    const { profile, fetchProfile, updatePassword } = props;
+
+    const [isEdit, setIsEdit] = React.useState(false);
+    const [isPassword, setIsPassword] = React.useState(false);
 
     React.useEffect(
       () => {
@@ -92,8 +120,21 @@ export default compose(
           fetchProfile();
         }
       },
-      [fetchProfile, profile],
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
     )
+
+    const clickEditProfileButtonHandler = () => {
+      setIsEdit(true);
+    }
+
+    const clickChangePasswordButtonHandler = () => {
+      setIsPassword(true);
+    }
+
+    const clickCancelPasswordButtonHandler = () => {
+      isPassword(false);
+    }
 
     if(isEmpty(profile)) {
       return(
@@ -101,9 +142,23 @@ export default compose(
       )
     }
 
+    if(isPassword) {
+      return (
+        <Password
+          setIsPassword={setIsPassword}
+          updatePassword={updatePassword}
+        />
+      )
+    }
+
     return(
       <BaseComponent
         {...props}
+        isEdit={isEdit}
+        setIsEdit={setIsEdit}
+        clickEditProfileButtonHandler={clickEditProfileButtonHandler}
+        clickChangePasswordButtonHandler={clickChangePasswordButtonHandler}
+        clickCancelPasswordButtonHandler={clickCancelPasswordButtonHandler}
       />
     )
   },

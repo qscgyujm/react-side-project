@@ -10,6 +10,8 @@ const SectionWrapper = styled.section`
 
 const SectionTitle = styled.p`
   margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 700;
 `;
 
 const SectionContent = styled.label`
@@ -53,11 +55,10 @@ const Profile = (props) => {
 
   return (
     <ProfileWrapper>
-      user
       <SectionWrapper>
         <SectionTitle>Email</SectionTitle>
         {
-          isEdit
+          !isEdit
           ? (
             <SectionContent>
               {email}
@@ -73,10 +74,20 @@ const Profile = (props) => {
       </SectionWrapper>
       <SectionWrapper>
         <SectionTitle>Name</SectionTitle>
-        <SectionInput 
-          value={name}
-          onChange={changeNameHandler}
-        />
+        {
+          !isEdit
+          ? (
+            <SectionContent>
+              {name}
+            </SectionContent>
+          )
+          :(
+            <SectionInput 
+              value={name}
+              onChange={changeNameHandler}
+            />
+          )
+        }
       </SectionWrapper>
       {/* <SectionWrapper>
         <SectionTitle>Password</SectionTitle>
@@ -87,10 +98,20 @@ const Profile = (props) => {
       </SectionWrapper> */}
       <SectionWrapper>
         <SectionTitle>Location</SectionTitle>
-        <SectionInput 
-          value={location}
-          onChange={changeLocationHandler}
-        />
+        {
+          !isEdit
+          ? (
+            <SectionContent>
+              {location}
+            </SectionContent>
+          )
+          :(
+            <SectionInput 
+              value={location}
+              onChange={changeLocationHandler}
+            />
+          )
+        }
       </SectionWrapper>
     </ProfileWrapper>
   )

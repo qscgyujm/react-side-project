@@ -13,6 +13,7 @@ import ControlPanel from './ControlPanel';
 const ProductContainer = styled.div`
   width: 25%;
   padding: 10px;
+  box-sizing: border-box;
 
   ${media.tablet`
     width: 50%;
