@@ -68,6 +68,12 @@ const SellProduct = (props) => {
         {
           product.name
         }
+        {' '}
+        {'('}
+        {
+          product.price
+        }
+        {')'}
       </ProductName>
       <ControlPanel
         {...props}

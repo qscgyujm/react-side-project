@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 
 import { action as productAction } from '../../redux/product';
+import { action as fileAction } from '../../redux/file';
 
 import withWrapper from '../../hoc/withWrapper';
 
@@ -54,11 +55,16 @@ const mapDispatchToProps = (dispatch) => {
     updateProduct,
   } = productAction;
 
+  const { 
+    uploadImg,
+  } = fileAction;
+
   return{
     ...bindActionCreators({
       fetchProduct,
       createProduct,
       updateProduct,
+      uploadImg,
     }, dispatch),
   }
 }

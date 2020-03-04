@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
+import { compose } from 'recompose';
 
 import { Button } from '../style/unit';
 
@@ -21,7 +22,12 @@ const ConfirmButton = styled(Button)`
 `;
 
 const CheckoutPanel = (props) => {
-  const { localOrder, productList } = props;
+  const { 
+    localOrder, 
+    productList, 
+    clickSubmitOrderHandler, 
+    clickCancelOrderHandler,
+  } = props;
 
   const totalPrice = React.useMemo(() => {
     return localOrder.reduce((acc, order) => {
@@ -38,11 +44,38 @@ const CheckoutPanel = (props) => {
           {totalPrice}
         </PriceTag>
       </PriceWrapper>
-      <ConfirmButton>
+      <ConfirmButton
+        onClick={clickSubmitOrderHandler}
+      >
         送出
+      </ConfirmButton>
+      <ConfirmButton
+        onClick={clickCancelOrderHandler}
+      >
+        取消
       </ConfirmButton>
     </OrderWrapper>
   )
 }
 
-export default CheckoutPanel;
+export default compose(
+  (BaseComponent) => (props) => {
+    const { localOrder, setLocalOrder, createOrder } = props;
+    
+    const clickSubmitOrderHandler = () => {
+      console.log('localOrder', localOrder);
+    }
+
+    const clickCancelOrderHandler = () => {
+      setLocalOrder([]);
+    }
+    
+    return(
+      <BaseComponent 
+        {...props}
+        clickSubmitOrderHandler={clickSubmitOrderHandler}
+        clickCancelOrderHandler={clickCancelOrderHandler}
+      />
+    )
+  },
+)(CheckoutPanel);

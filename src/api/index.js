@@ -54,6 +54,27 @@ export const updateProduct = ({id, body, token}) => {
   });
 }
 
+export const uploadImg = (payload) => {
+  console.log('api', payload);
+  const { formData, token } = payload;
+  return apiRoot.post('/general/uploadImg', formData, {
+    headers: {
+      Authorization: token,
+      // 'content-type': 'multipart/form-data',
+      contentType: 'multipart/form-data'
+    }
+  })
+}
+
+// export const uploadBPProductFeaturesImage = (
+//   body: UploadBPProductFeaturesImageBody,
+// ) => apiRoot.post('/brands/product-features/images', body, {
+//   headers: {
+//     'content-type': 'multipart/form-data',
+//   },
+// });
+
+
 // Profile
 
 export const getProfile = (token) => {

@@ -21,12 +21,18 @@ import {
   reducer as AuthReducer,
 } from './auth';
 
+import {
+  saga as FilSaga,
+  reducer as FileReducer,
+} from './file';
+
 export function* rootSaga() {
   yield all([
     ...ProductSaga,
     ...OrderSaga,
     ...ProfileSaga,
     ...AuthSaga,
+    ...FilSaga,
   ])
 }
 
@@ -35,6 +41,7 @@ export const rootReducer = combineReducers({
   order: OrderReducer,
   profile: ProfileReducer,
   auth: AuthReducer,
+  file: FileReducer,
 })
 
 

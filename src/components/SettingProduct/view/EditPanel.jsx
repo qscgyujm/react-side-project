@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components';
 import { compose } from 'recompose';
 
+import ImgUpload from '../../Upload';
+
 const EditContainer = styled.div`
   padding: 15px;
 `;
@@ -58,9 +60,12 @@ const EditPanel = (props) => {
       </EditWrapper>
       <EditWrapper>
         <EditTile>imageUrl</EditTile>
-        <EditInput
-          type="file"
+        <ImgUpload 
+          {...props}
         />
+        {/* <EditInput
+          type="file"
+        /> */}
       </EditWrapper>
     </EditContainer>
   )

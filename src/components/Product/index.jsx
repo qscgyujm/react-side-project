@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 
 import { action as productAction } from '../../redux/product';
+import { action as orderAction } from '../../redux/order';
 
 import withWrapper from '../../hoc/withWrapper';
 
@@ -58,10 +59,14 @@ const mapDispatchToProps = (dispatch) => {
   const {
     fetchProduct,
   } = productAction;
+  const {
+    createOrder,
+  } = orderAction;
 
   return{
     ...bindActionCreators({
       fetchProduct,
+      createOrder,
     }, dispatch),
   }
 }
