@@ -17,6 +17,13 @@ export const checkAuth = (token) => {
 
 export const postLogin = (body) => apiRoot.post('/auth/login', body);
 
+export const sendCode = (email) => {
+  console.log(email);
+  return apiRoot.post('/auth/sendCode', { email });
+}
+
+export const checkCode = (body) => apiRoot.post('/auth/checkCode', body);
+
 // Product
 
 export const getTestProduct = () => apiRoot.get('/test/product');

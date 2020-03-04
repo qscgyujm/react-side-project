@@ -22,7 +22,7 @@ const SectionInput = styled.input`
 `;
 
 const Profile = (props) => {
-  const { localProfile, setLocalProfile, isEdit } = props;
+  const { localProfile, setLocalProfile, isEdit, isRegister } = props;
   const { email, name, location } = localProfile;
 
   const changeEmailHandler = (e) => {
@@ -39,12 +39,12 @@ const Profile = (props) => {
     })
   }
 
-  // const changePasswordHandler = (e) => {
-  //   setLocalProfile({
-  //     ...localProfile,
-  //     password: e.target.value,
-  //   })
-  // }
+  const changePasswordHandler = (e) => {
+    setLocalProfile({
+      ...localProfile,
+      password: e.target.value,
+    })
+  }
 
   const changeLocationHandler = (e) => {
     setLocalProfile({
@@ -89,13 +89,18 @@ const Profile = (props) => {
           )
         }
       </SectionWrapper>
-      {/* <SectionWrapper>
-        <SectionTitle>Password</SectionTitle>
-        <SectionInput 
-          value={password}
-          onChange={changePasswordHandler}
-        />
-      </SectionWrapper> */}
+      {
+        isRegister
+        && (
+          <SectionWrapper>
+            <SectionTitle>Password</SectionTitle>
+            <SectionInput 
+              value={localProfile.password}
+              onChange={changePasswordHandler}
+            />
+          </SectionWrapper>
+        )
+      }
       <SectionWrapper>
         <SectionTitle>Location</SectionTitle>
         {

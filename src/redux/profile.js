@@ -14,9 +14,6 @@ const ActionType = {
   FETCH_PROFILE_REQUEST: 'FETCH_PROFILE_REQUEST',
   FETCH_PROFILE_SUCCESS: 'FETCH_PROFILE_SUCCESS',
   FETCH_PROFILE_FAILURE: 'FETCH_PROFILE_FAILURE',
-  CREATE_PROFILE_REQUEST: 'CREATE_PROFILE_REQUEST',
-  CREATE_PROFILE_SUCCESS: 'CREATE_PROFILE_SUCCESS',
-  CREATE_PROFILE_FAILURE: 'CREATE_PROFILE_FAILURE',
   UPDATE_PROFILE_REQUEST: 'UPDATE_PROFILE_REQUEST',
   UPDATE_PROFILE_SUCCESS: 'UPDATE_PROFILE_SUCCESS',
   UPDATE_PROFILE_FAILURE: 'UPDATE_PROFILE_FAILURE',
@@ -26,9 +23,6 @@ const ActionType = {
 }
 
 export const action = {
-  createProfile: (profile, resolve, reject) => ({type: ActionType.CREATE_PROFILE_REQUEST, profile, resolve, reject}),
-  createProfileFailure: () => ({type: ActionType.CREATE_PROFILE_FAILURE}),
-  createProfileSuccess: () => ({type: ActionType.CREATE_PROFILE_SUCCESS}),
   fetchProfile: () => ({type: ActionType.FETCH_PROFILE_REQUEST}),
   fetchProfileFailure: () => ({type: ActionType.FETCH_PROFILE_FAILURE}),
   fetchProfileSuccess: (profile) => ({type: ActionType.FETCH_PROFILE_SUCCESS, payload: profile}),
@@ -54,22 +48,6 @@ function* fetchProfileSaga() {
      yield put(action.fetchProfileSuccess(profile));
   } catch (error) {
     yield put(action.fetchProfileFailure());
-  }
-}
-
-function* createProfileSaga(payload) {
-  const { profile, resolve, reject } = payload;
-  console.log('create success', payload);
-  try {
-
-    if(resolve) {
-      resolve();
-    }
-
-    yield put(action.createProfileSuccess());
-  } catch (error) {
-    reject();
-    yield put(action.createProfileFailure());
   }
 }
 
@@ -106,7 +84,6 @@ function* updateProfilePasswordSaga(payload) {
 
 export const saga = [
   takeLatest(ActionType.FETCH_PROFILE_REQUEST, fetchProfileSaga),
-  takeLatest(ActionType.CREATE_PROFILE_REQUEST, createProfileSaga),
   takeLatest(ActionType.UPDATE_PROFILE_REQUEST, updateProfileSaga),
   takeLatest(ActionType.UPDATE_PROFILE_PASSWORD_REQUEST, updateProfilePasswordSaga),
 ];
@@ -115,21 +92,6 @@ export const saga = [
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.CREATE_PROFILE_REQUEST:
-      return {
-        ...state,
-        isFetch: true,
-      };
-    case ActionType.CREATE_PROFILE_FAILURE:
-      return {
-        ...state,
-        isError: true,
-      };
-    case ActionType.CREATE_PROFILE_SUCCESS:
-      return {
-        ...state,
-        isFetch: false,
-      }
     case ActionType.FETCH_PROFILE_REQUEST:
       return {
         ...state,

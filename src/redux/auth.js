@@ -5,7 +5,6 @@ import * as API from '../api/index';
 // State
 const initialState = {
   isAuth: null,
-  isSend: false,
   isFetch: false,
   isError: false,
 }
@@ -39,12 +38,12 @@ export const action = {
   logoutAuth: () => ({type: ActionType.LOGOUT_AUTH_REQUEST}),
   logoutAuthSuccess: () => ({type: ActionType.LOGOUT_AUTH_SUCCESS}),
   logoutAuthFailure: () => ({type: ActionType.LOGOUT_AUTH_FAILURE}),
-  sendCode: (email) => ({type: ActionType.SEND_VERIFY_CODE_REQUEST, email}),
+  sendCode: (email, resolve) => ({type: ActionType.SEND_VERIFY_CODE_REQUEST, payload: { email, resolve}}),
   sendCodeSuccess: () => ({type: ActionType.SEND_VERIFY_CODE_SUCCESS}),
   sendCodeFailure: () => ({type: ActionType.SEND_VERIFY_CODE_FAILURE}),
-  checkCode: (body) => ({type: ActionType.CHECK_AUTH_REQUEST, body}),
-  checkCodeSuccess: () => ({type: ActionType.CHECK_AUTH_SUCCESS}),
-  checkCodeFailure: () => ({type: ActionType.CHECK_AUTH_FAILURE}),
+  checkCode: (body, resolve, reject) => ({type: ActionType.CHECK_VERIFY_CODE_REQUEST, payload: { body, resolve, reject}}),
+  checkCodeSuccess: () => ({type: ActionType.CHECK_VERIFY_CODE_SUCCESS}),
+  checkCodeFailure: () => ({type: ActionType.CHECK_VERIFY_CODE_FAILURE}),
 }
 
 // Saga
@@ -100,9 +99,17 @@ function* logoutAuthSaga() {
   }
 }
 
-function* sendCodeSaga(payload) {
+function* sendCodeSaga({ payload }) {
   try {
+    console.log('sendCodeSaga', payload);
+    const { email, resolve } = payload;
     
+    yield call(API.sendCode, email);
+
+    if(resolve) {
+      console.log('resolve');
+      resolve();
+    }
 
     yield put(action.sendCodeSuccess());
   } catch (error) {
@@ -110,9 +117,16 @@ function* sendCodeSaga(payload) {
   }
 }
 
-function* checkCodeSaga(payload) {
+function* checkCodeSaga({payload}) {
+  const { body, resolve, reject } = payload;
   try {
+    console.log(body, resolve);
+
+    yield call(API.checkCode, body);
     
+    if(resolve) {
+      resolve();
+    }
 
     yield put(action.checkCodeSuccess());
   } catch (error) {
@@ -181,37 +195,36 @@ export const reducer = (state = initialState, action) => {
         isFetch: false,
         isAuth: false,
       }
-      case ActionType.SEND_VERIFY_CODE_REQUEST:
-        return {
-          ...state,
-          isFetch: true,
-        };
-      case ActionType.SEND_VERIFY_CODE_FAILURE:
-        return {
-          ...state,
-          isError: true,
-        };
-      case ActionType.SEND_VERIFY_CODE_SUCCESS:
-        return {
-          ...state,
-          isFetch: false,
-          isSend: true,
-        }
-        case ActionType.CHECK_VERIFY_CODE_REQUEST:
-          return {
-            ...state,
-            isFetch: true,
-          };
-        case ActionType.CHECK_VERIFY_CODE_FAILURE:
-          return {
-            ...state,
-            isError: true,
-          };
-        case ActionType.CHECK_VERIFY_CODE_SUCCESS:
-          return {
-            ...state,
-            isFetch: false,
-          }
+    case ActionType.SEND_VERIFY_CODE_REQUEST:
+      return {
+        ...state,
+        isFetch: true,
+      };
+    case ActionType.SEND_VERIFY_CODE_FAILURE:
+      return {
+        ...state,
+        isError: true,
+      };
+    case ActionType.SEND_VERIFY_CODE_SUCCESS:
+      return {
+        ...state,
+        isFetch: false,
+      }
+    case ActionType.CHECK_VERIFY_CODE_REQUEST:
+      return {
+        ...state,
+        isFetch: true,
+      };
+    case ActionType.CHECK_VERIFY_CODE_FAILURE:
+      return {
+        ...state,
+        isError: true,
+      };
+    case ActionType.CHECK_VERIFY_CODE_SUCCESS:
+      return {
+        ...state,
+        isFetch: false,
+      }
     default:
       return state;
   }
