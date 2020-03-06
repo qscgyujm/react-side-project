@@ -45,6 +45,9 @@ const loggedInLink = [{
   path: '/product',
   name: 'Product',
 }, {
+  path: '/order',
+  name: 'Order',
+},{
   path: '/setting_product',
   name: 'Setting Product',
 }, {

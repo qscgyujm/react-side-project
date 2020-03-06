@@ -64,6 +64,8 @@ export default compose(
     
     const clickSubmitOrderHandler = () => {
       console.log('localOrder', localOrder);
+
+      createOrder(localOrder);
     }
 
     const clickCancelOrderHandler = () => {

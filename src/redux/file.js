@@ -32,7 +32,8 @@ function* uploadImgSaga({ payload }) {
     const token = localStorage.getItem('token');
 
     const { data } = yield call(API.uploadImg, {formData, token })
-    console.log(data);
+
+    resolve(data);
 
     yield put(action.uploadImgSuccess());
   } catch (error) {

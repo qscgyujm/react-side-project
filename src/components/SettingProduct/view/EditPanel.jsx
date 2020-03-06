@@ -29,9 +29,11 @@ const EditInput = styled.input`
 const EditPanel = (props) => {
   const { 
     localState,
+    setLocalState,
     changeNameHandler,
     changeDescriptionHandler,
     changePriceHandler,
+    uploadImg,
   } = props;
 
   return (
@@ -60,12 +62,11 @@ const EditPanel = (props) => {
       </EditWrapper>
       <EditWrapper>
         <EditTile>imageUrl</EditTile>
-        <ImgUpload 
-          {...props}
+        <ImgUpload
+          localState={localState}
+          setLocalState={setLocalState}
+          uploadImg={uploadImg}
         />
-        {/* <EditInput
-          type="file"
-        /> */}
       </EditWrapper>
     </EditContainer>
   )
@@ -99,13 +100,11 @@ export default compose(
       });
     }
 
-    const changeImageUrlHandler = (e) => {
-    }
-
     return(
       <BaseComponent 
         {...props}
         localState={localState}
+        setLocalState={setLocalState}
         changeNameHandler={changeNameHandler}
         changeDescriptionHandler={changeDescriptionHandler}
         changePriceHandler={changePriceHandler}

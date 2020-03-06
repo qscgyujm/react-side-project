@@ -103,6 +103,26 @@ export const updateProfilePassword = ({passwordObj, token}) => {
 
 // Order
 
-export const getOrderList = () => apiRoot.get('/order');
-export const updateOrder = (orderId) => apiRoot.get(`/order/${orderId}`);
+export const getOrderList = ({ token }) => {
+  console.log('getOrderList', token);
+  return apiRoot.get('/order', {
+    headers: {
+      Authorization: token,
+    }
+  });
+}
+
+export const createOrder = ({payload, token}) => {
+  console.log(payload, token);
+  return apiRoot.post('/order/create', payload, {
+    headers: {
+      Authorization: token,
+    }
+  });
+}
+
+export const updateSubmitOrder = ({payload, token}) => {
+  console.log({payload, token});
+  return apiRoot.put('/order/submit/11')
+}
 

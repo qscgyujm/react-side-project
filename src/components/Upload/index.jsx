@@ -9,42 +9,30 @@ const Input = styled.input`
 
 const index = (props) => {
   console.log('upload', props);
-  const { uploadImg } = props;
-
-  const [url, setUrl] = React.useState('');
+  const { 
+    localState,
+    setLocalState,
+    uploadImg,
+   } = props;
 
   const changeInputHandler = (e) => {
     e.preventDefault();
 
     const resolve = (url) => {
-      setUrl(url);
+      setLocalState({
+        ...localState,
+        imageUrl: url,
+      });
     }
 
     uploadImageHelper(e, uploadImg, resolve);
-
-    // const formData = new FormData();
-    // const file = e.currentTarget.files[0];
-
-    // formData.append('image', file);
-
-
-    // console.log('upload', formData, file);
-
-    // if(file){
-    //   uploadImg(formData, resolve)
-    // }
   }
 
   return (
-    <>
-    {
-      'url:' + url
-    }
-      <Input 
-        type='file'
-        onChange={changeInputHandler}
-      />
-    </>
+    <Input 
+      type='file'
+      onChange={changeInputHandler}
+    />
   )
 }
 

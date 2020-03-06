@@ -14,7 +14,6 @@ const LoggedInWrapper = styled.div`
   position: relative;
 `;
 
-
 const PathWrapper = styled.div`
   margin-right: 50px;
 `;

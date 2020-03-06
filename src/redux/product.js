@@ -65,9 +65,9 @@ function* createProductSaga({ payload }) {
     const { productList } = data;
     console.log('create product', data);
 
-    // if(resolve){
-    //   resolve();
-    // }
+    if(resolve){
+      resolve();
+    }
     
     yield put(action.createProductSuccess(productList));
   } catch (error) {

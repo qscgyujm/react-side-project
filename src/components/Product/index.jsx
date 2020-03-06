@@ -22,7 +22,7 @@ const ProductWrapper = styled.div`
 `;
 
 const SellProductTable = (props) => {
-  const { productList } = props;;
+  const { productList, createOrder } = props;;
 
   const [localOrder, setLocalOrder] = React.useState([]);
 
@@ -31,6 +31,7 @@ const SellProductTable = (props) => {
       <OrderPanel 
         localOrder={localOrder}
         productList={productList}
+        createOrder={createOrder}
       />
       <ProductWrapper>
         {

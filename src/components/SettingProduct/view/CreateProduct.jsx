@@ -5,11 +5,29 @@ import { pick, every } from 'lodash';
 
 import AddIconSrc from '../../../img/add.png';
 
-import { ProductWrapper } from '../../Product/style/layout';
+import withWrapper from '../../../hoc/withWrapper'
+
+// import { ProductWrapper } from '../../Product/style/layout';
 import { Button } from '../../Product/style/unit';
 
 import ProductImage from '../../Product/view/ProductImg';
 import EditPanel from './EditPanel';
+
+const ProductContainer = styled.div`
+  width: 25%;
+  padding: 10px;
+  box-sizing: border-box;
+`;
+
+const ProductWrapper = styled.div`
+  background-color: #8a8a8a;
+  border: solid 1px #8a8a8a;
+  border-radius: 5px;
+`;
+
+const CreateProductWrapper = styled.div`
+  height: 300px;
+`;
 
 const IconWrapper = styled.div`
   display: flex;
@@ -29,41 +47,43 @@ const ButtonWrapper = styled.div`
   justify-content: space-around;
 `;
 
+const initialState = () => ({
+  name: '',
+  description: '',
+  price: 1,
+  imageUrl: '',
+});
+
 const CreatePanel = (props) => {
-  const { localState, setLocalState, } = props;
+  const { localState, setLocalState, uploadImg, } = props;
+
   return (
     <>
       <ProductImage
         imageUrl={localState.imageUrl}
       />
-      <EditPanel 
+      <EditPanel
         localState={localState}
         setLocalState={setLocalState}
+        uploadImg={uploadImg}
       />
     </>
   )
 }
 
 export default compose(
+  withWrapper(ProductContainer),
+  withWrapper(ProductWrapper),
   (BaseComponent) => (props) => {
-    const [localState, setLocalState] = React.useState({
-      name: '',
-      description: '',
-      price: 1,
-      imageUrl: '',
-    })
-    
+    console.log('create props', props);
+
+    const [localState, setLocalState] = React.useState(initialState())
     const [isCreate, setIsCreate] =React.useState(false);
 
     const clickCreateButtonHandler = () => {
       setIsCreate(true);
 
-      setLocalState({
-        name: '',
-        description: '',
-        price: 1,
-        imageUrl: '',
-      });
+      setLocalState(initialState());
     }
 
     const clickCancelButtonHandler = () => {
@@ -76,22 +96,17 @@ export default compose(
       const newProduct = pick(localState, ['name', 'price']);
       
       if(every(newProduct)) {
-        setLocalState({
-          name: '',
-          description: '',
-          price: 1,
-          imageUrl: '',
-        });
+        setLocalState(initialState());
       }
 
-      const resolve = () => setLocalState(false);
+      const resolve = () => setIsCreate(false);
 
       createProduct(localState, resolve);
     }
 
     if(!isCreate){
       return (
-        <ProductWrapper>
+        <CreateProductWrapper>
           <IconWrapper>
             <AddIcon
               src={AddIconSrc}
@@ -99,12 +114,12 @@ export default compose(
               alt='add'
             />
           </IconWrapper>
-        </ProductWrapper>
+        </CreateProductWrapper>
       )
     }
 
     return(
-      <ProductWrapper>
+      <>
         <BaseComponent 
           {...props}
           localState={localState}
@@ -115,7 +130,7 @@ export default compose(
           <Button onClick={clickCancelButtonHandler} >取消</Button>
           <Button onClick={clickSaveButtonHandler}>儲存</Button>
         </ButtonWrapper>
-      </ProductWrapper>
+      </>
     )
   },
 )(CreatePanel);

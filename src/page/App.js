@@ -13,6 +13,7 @@ import ProtectLogoutRoute from '../components/Protect/LoggedOutRoute';
 import Login from '../components/Login';
 import RegisterProfile from '../components/RegisterProfile';
 import Product from '../components/Product';
+import Order from '../components/Order';
 import SettingProduct from '../components/SettingProduct';
 import EditProfile from '../components/EditProfile'
 
@@ -37,6 +38,7 @@ function App(props) {
         <ProtectLogoutRoute path="/" exact={true} component={Login} />
         <ProtectLogoutRoute path="/register"  exact={true} component={RegisterProfile} />
         <ProtectLoginRoute path="/product" exact={true} component={Product} />
+        <ProtectLoginRoute path="/order" exact={true} component={Order} />
         <ProtectLoginRoute path="/setting_product" exact={true} component={SettingProduct} />
         <ProtectLoginRoute path="/edit_Profile" exact={true} component={EditProfile} />
       </Switch>
