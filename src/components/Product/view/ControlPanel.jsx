@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components';
 
-import { Button } from '../style/unit';
+import { Button } from '../../../styles/unit';
 
 const ControlWrapper = styled.div`
   display: flex;

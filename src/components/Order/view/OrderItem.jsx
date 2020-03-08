@@ -6,17 +6,33 @@ import { format } from 'date-fns';
 import { Button } from '../../../styles/unit';
 
 const ItemContainer = styled.div`
-  padding: 10px;
+  margin-bottom: 5px;
 `;
 
 const ItemWrapper = styled.div`
   display: flex;
-  border: 1px solid #777777;
+  border: 1px solid #e9e9e9;
+  border-radius: 5px;
+  background-color: #e9e9e9;
+  
   padding: 5px;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ContentWrapper = styled.div`
+  display: flex;
 `;
+
+const InfoWrapper = styled.div`
+  :not(:last-of-type) {
+    margin-right: 30px;
+  }
+`;
+
+const EditWrapper = styled.div`
+`;
+
 
 const DetailWrapper = styled.div`
   display: flex;
@@ -29,22 +45,15 @@ const DetailItem = styled.p`
 `;
 
 const OrderButton = styled(Button)`
-
+  :not(:last-of-type) {
+    margin-right: 15px;
+  }
 `;
 
-// order_id: 1
-// totalPrice: 446
-// detailOrder: Array(1)
-// 0: {id: "3", quantity: "2", price: "446.00"}
-// length: 1
-// __proto__: Array(0)
-// createdAt: "2020-03-05T07:51:50.000Z"
-
-// const convertDateTime = (time) => format(time, 'yyyy/M/dd HH:mm:ss')
 const convertDateTime = (time) => format(new Date(time), 'yy/MM/dd HH:mm:ss');
 
 const OrderItem = (props) => {
-  const { order } = props;
+  const { order, clickSubmitOrderHandler, } = props;
   const { 
     order_id,
     totalPrice,
@@ -52,18 +61,22 @@ const OrderItem = (props) => {
     createdAt,
   } = order;
 
-  console.log(format(new Date(createdAt), 'MM/dd HH:mm:ss'));
-
   return (
     <ItemContainer>
       <ItemWrapper>
         <ContentWrapper>
-          Order 序號: {order_id}
+          <InfoWrapper>
+            Order 序號: {order_id}
+          </InfoWrapper>
+          <InfoWrapper>
+            總價格: {totalPrice}
+          </InfoWrapper>
+          <InfoWrapper>
+            建立時間: 
+            {convertDateTime(createdAt)}
+          </InfoWrapper>
         </ContentWrapper>
-        <ContentWrapper>
-          總價格: {totalPrice}
-        </ContentWrapper>
-        <ContentWrapper>
+        {/* <ContentWrapper>
           訂單詳細資料:
           <br/>
           {
@@ -83,15 +96,19 @@ const OrderItem = (props) => {
               </DetailWrapper>
             ))
           }
-        </ContentWrapper>
-        <ContentWrapper>
+        </ContentWrapper> */}
+        {/* <ContentWrapper>
           建立時間: 
           {convertDateTime(createdAt)}
-        </ContentWrapper>
-        <ContentWrapper>
+        </ContentWrapper> */}
+        <EditWrapper>
           <OrderButton>編輯</OrderButton>
-          <OrderButton>出單</OrderButton>
-        </ContentWrapper>
+          <OrderButton
+            onClick={clickSubmitOrderHandler}
+          >
+            出單
+          </OrderButton>
+        </EditWrapper>
       </ItemWrapper>
     </ItemContainer>
   )
@@ -100,10 +117,11 @@ const OrderItem = (props) => {
 export default compose(
   (BaseComponent) => (props) => {
     const { order, updateSubmitOrder } = props;
-    console.log('orderItem', order);
         
     const clickSubmitOrderHandler = () => {
+      const { order_id : orderId } = order;
 
+      updateSubmitOrder(orderId);
     }
 
     const clickEditOrderHandler = () => {

@@ -17,6 +17,7 @@ const ProductWrapper = styled.div`
   background-color: #8a8a8a;
   border: solid 1px #8a8a8a;
   border-radius: 5px;
+  min-height: 450px;
 `;
 
 const Product = (props) => {

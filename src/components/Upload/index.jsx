@@ -8,7 +8,6 @@ const Input = styled.input`
 `;
 
 const index = (props) => {
-  console.log('upload', props);
   const { 
     localState,
     setLocalState,

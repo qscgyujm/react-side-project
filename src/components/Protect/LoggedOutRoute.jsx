@@ -8,7 +8,6 @@ const ProtectRoute = ({
   component: BaseComponent,
   ...rest
 }) => {
-  // console.log('out', BaseComponent, rest);
 
   const history = useHistory();
   const { isAuth } = rest;

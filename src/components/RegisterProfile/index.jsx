@@ -43,7 +43,6 @@ const initialState = () => ({
 })
 
 const index = (props) => {
-  console.log('re', props);
   const { 
     localProfile,
     setLocalProfile,
@@ -127,7 +126,6 @@ export default compose(
       const { email } = localProfile;
 
       if (!every(pick(localProfile, ['email', 'name', 'password', 'location']))) {
-        console.log(email);
         return;
       }
 

@@ -45,7 +45,6 @@ export const action = {
 function* fetchProductSaga() {
   try {
     const token = localStorage.getItem('token');
-    console.log('token', token);
 
     const { data } = yield call(API.getProductList, token);
     yield put(action.fetchProductSuccess(data));
@@ -58,12 +57,10 @@ function* createProductSaga({ payload }) {
   try {
     const token = localStorage.getItem('token');
     
-    console.log('create product', payload);
     const { resolve } = payload;
 
     const { data } = yield call(API.createProduct, { ...payload, token});
     const { productList } = data;
-    console.log('create product', data);
 
     if(resolve){
       resolve();
@@ -79,19 +76,14 @@ function* updateProductSaga({ payload }) {
   try {
     const token = localStorage.getItem('token');
     
-    console.log('update product',  payload);
-
     const { resolve } = payload;
     const { data } = yield call(API.updateProduct, { ...payload, token});
     const { productList } = data;
-    console.log('update product', data);
 
     if(resolve) {
-      console.log('resolve');
       resolve();
     }
 
-    // const { data } = yield call(API.getProductList, token);
     yield put(action.updateProductSuccess(productList));
   } catch (error) {
     yield put(action.updateProductFailure());

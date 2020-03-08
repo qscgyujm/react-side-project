@@ -14,7 +14,7 @@ import { LoginContainer } from '../../styles/layout'
 
 import Loading from '../Loading';
 import SellProductItem from './view/SellProductItem';
-import OrderPanel from './view/CheckProduct';
+import CheckoutProduct from './view/CheckoutProduct';
 
 const ProductWrapper = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ const SellProductTable = (props) => {
 
   return (
     <>
-      <OrderPanel 
+      <CheckoutProduct 
         localOrder={localOrder}
         productList={productList}
         createOrder={createOrder}

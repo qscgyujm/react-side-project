@@ -108,7 +108,6 @@ export default compose(
   withWrapper(EnhanceLoginContainer),
   withWrapper(EditWrapper),
   (BaseComponent) => (props) => {
-    console.log('setting Profile', props);
     const { profile, fetchProfile, updatePassword } = props;
 
     const [isEdit, setIsEdit] = React.useState(false);

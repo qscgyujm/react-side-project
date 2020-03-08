@@ -17,11 +17,12 @@ export const LogoutContainer = styled(Wrapper)`
 `
 
 export const LoginContainer = styled.div`
-  margin: 15px 50px 0;
+  margin: 0 50px;
   background-color: #cfe1e6;
   min-height: calc(100vh - 50px);
 
   ${media.tablet`
     margin: 0;
+    min-height: 100vh;
   `}
 `;

@@ -122,7 +122,11 @@ export const createOrder = ({payload, token}) => {
 }
 
 export const updateSubmitOrder = ({payload, token}) => {
-  console.log({payload, token});
-  return apiRoot.put('/order/submit/11')
+  console.log('updateSubmitOrder',payload, token );
+  return apiRoot.put(`/order/submit/${payload}`, null, {
+    headers: {
+      Authorization: token,
+    }
+  })
 }
 

@@ -85,7 +85,7 @@ function* updateOrderSaga(payload) {
   }
 }
 
-function* updateSubmitOrderSaga(payload) {
+function* updateSubmitOrderSaga({payload}) {
   try {
     console.log('updateSubmitOrderSaga', payload);
 

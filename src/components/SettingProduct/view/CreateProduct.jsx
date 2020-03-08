@@ -7,8 +7,7 @@ import AddIconSrc from '../../../img/add.png';
 
 import withWrapper from '../../../hoc/withWrapper'
 
-// import { ProductWrapper } from '../../Product/style/layout';
-import { Button } from '../../Product/style/unit';
+import { Button } from '../../../styles/unit';
 
 import ProductImage from '../../Product/view/ProductImg';
 import EditPanel from './EditPanel';
@@ -23,10 +22,12 @@ const ProductWrapper = styled.div`
   background-color: #8a8a8a;
   border: solid 1px #8a8a8a;
   border-radius: 5px;
+  height: 450px;
+  display: flex;
+  justify-content: center;
 `;
 
 const CreateProductWrapper = styled.div`
-  height: 300px;
 `;
 
 const IconWrapper = styled.div`
@@ -75,7 +76,6 @@ export default compose(
   withWrapper(ProductContainer),
   withWrapper(ProductWrapper),
   (BaseComponent) => (props) => {
-    console.log('create props', props);
 
     const [localState, setLocalState] = React.useState(initialState())
     const [isCreate, setIsCreate] =React.useState(false);

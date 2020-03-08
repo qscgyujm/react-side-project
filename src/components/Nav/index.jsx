@@ -7,9 +7,20 @@ import { Link } from 'react-router-dom';
 
 import { action as authAction } from '../../redux/auth';
 
+import withWrapper from '../../hoc/withWrapper';
+
+import { media } from '../../helper/media';
+
 import iconSrc from '../../img/logo192.png';
 
 import LoggedInNav from './view/LoggedInNav'
+
+const NavContainer = styled.div`
+
+  ${media.tablet`
+    display: none;
+  `}
+`;
 
 const NavWrapper = styled.div`
   height: 50px;
@@ -94,6 +105,7 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withWrapper(NavContainer),
   (BaseComponent) => (props) => {
     const { isAuth, logoutAuth } = props;
 

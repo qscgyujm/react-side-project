@@ -4,25 +4,50 @@ import { connect } from 'react-redux'
 import { compose } from 'recompose';
 import { bindActionCreators } from 'redux';
 import { isEmpty } from 'lodash';
+import { useHistory } from 'react-router-dom';
 
 import { action as orderAction } from '../../redux/order';
 
+import withWrapper from '../../hoc/withWrapper';
+
 import OrderItem from './view/OrderItem';
+import { LoginContainer } from '../../styles/layout'
+import { Button } from '../../styles/unit';
+
+const ItemWrapper = styled.div`
+  padding: 10px;
+`;
+
+const ButtonWrapper = styled.div`
+  padding: 10px;
+`;
+
+const MoveButton = styled(Button)`
+`;
 
 const index = (props) => {
-  const { orderList, updateSubmitOrder } = props;
+  const { orderList, updateSubmitOrder, clickMoveToProductHandler } = props;
   return (
-    <div>
-      {
-        orderList.map((order, i) => (
-          <OrderItem
-            key={i}
-            order={order}
-            updateSubmitOrder={updateSubmitOrder}
-          />
-        ))
-      }
-    </div>
+    <>
+      <ButtonWrapper>
+        <MoveButton
+          onClick={clickMoveToProductHandler}
+        >
+          To Product
+        </MoveButton>
+      </ButtonWrapper>
+      <ItemWrapper>
+        {
+          orderList.map((order, i) => (
+            <OrderItem
+              key={i}
+              order={order}
+              updateSubmitOrder={updateSubmitOrder}
+            />
+          ))
+        }
+      </ItemWrapper>
+    </>
   )
 }
 
@@ -48,9 +73,10 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
+  withWrapper(LoginContainer),
   (BaseComponent) => (props) => {
     const { orderList, fetchOrder } = props;
-    console.log(props);
+    const history = useHistory();
 
     React.useEffect(
       () => {
@@ -62,9 +88,14 @@ export default compose(
       [],
     )
 
+    const clickMoveToProductHandler = () => {
+      history.push('/product');
+    }
+
     return(
       <BaseComponent 
         {...props}
+        clickMoveToProductHandler={clickMoveToProductHandler}
       />
     )
   },

@@ -4,17 +4,24 @@ import { compose } from 'recompose';
 import { pick, every } from 'lodash';
 
 import { SectionWrapper } from '../style/layout';
-import { Button } from '../style/unit';
+import { Button } from '../../../styles/unit';
 
 import EditPanel from './EditPanel';
 
-const ProductTitle = styled.p`
+const SettingWrapper = styled.div`
+  padding: 10px;
 `;
 
-const ProductDescribe = styled.p`
+const ProductInfoTitle = styled.p`
+  font-size: 20px;
 `;
 
-const ProductPrice = styled.p`
+const ProductInfo = styled.p`
+  font-size: 16px;
+
+  :not(:last-of-type) {
+    margin-bottom: 10px;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -30,15 +37,18 @@ const ProductPanel = (props) => {
   const { name, description, price } = localState;
 
   return (
-    <div>
+    <SettingWrapper>
       <SectionWrapper>
-        <ProductTitle>{name}</ProductTitle>
+        <ProductInfoTitle>產品名:</ProductInfoTitle>
+        <ProductInfo>{name}</ProductInfo>
       </SectionWrapper>
       <SectionWrapper>
-        <ProductDescribe>{description}</ProductDescribe>
+        <ProductInfoTitle>敘述:</ProductInfoTitle>
+        <ProductInfo>{description}</ProductInfo>
       </SectionWrapper>
       <SectionWrapper>
-        <ProductPrice>{price}</ProductPrice>
+        <ProductInfoTitle>價格:</ProductInfoTitle>
+        <ProductInfo>{price}</ProductInfo>
       </SectionWrapper>
       <SectionWrapper
         style={{
@@ -52,7 +62,7 @@ const ProductPanel = (props) => {
           編輯
         </EditButton>
       </SectionWrapper>
-    </div>
+    </SettingWrapper>
   )
 }
 
@@ -70,7 +80,6 @@ export default compose(
 
     const clickUpdatedButtonHandler = () => {
       const { localState, updateProduct } = props;
-      console.log(localState);
 
       const updatedProduct = pick(localState, ['name', 'price']);
 
