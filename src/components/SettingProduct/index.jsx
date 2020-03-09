@@ -12,6 +12,7 @@ import withWrapper from '../../hoc/withWrapper';
 
 import { LoginContainer } from '../../styles/layout'
 
+import Loading from '../Loading';
 import SettingProductItem from './view/ProductItem';
 import CreateProduct from './view/CreateProduct';
 
@@ -21,7 +22,12 @@ const ProductWrapper = styled.div`
 `;
 
 const SettingProduct = (props) => {
-  const { productList } = props;;
+  // const { productList } = props;
+  console.log('SettingProduct', props.productList);
+
+  const productList = React.useMemo(
+    () => props.productList,[props.productList]
+  )
 
   return (
     <>
@@ -52,6 +58,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchProduct,
     createProduct,
     updateProduct,
+    deleteProduct,
   } = productAction;
 
   const { 
@@ -63,6 +70,7 @@ const mapDispatchToProps = (dispatch) => {
       fetchProduct,
       createProduct,
       updateProduct,
+      deleteProduct,
       uploadImg,
     }, dispatch),
   }
@@ -74,6 +82,7 @@ export default compose(
   withWrapper(ProductWrapper),
   (BaseComponent) => (props) => {
     const { productList, fetchProduct } = props
+    console.log('SettingProduct', productList);
 
     React.useEffect(
       () => {
@@ -87,7 +96,7 @@ export default compose(
 
     if(isEmpty(productList)) {
       return(
-        <div>Empty</div>
+        <Loading />
       )
     }
 

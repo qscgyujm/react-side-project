@@ -38,7 +38,8 @@ const EditPanel = (props) => {
 
   return (
     <EditContainer>
-      <EditWrapper>
+      <EditWrapper
+      >
         <EditTile>Name</EditTile>
         <EditInput 
           value={localState.name}
@@ -70,6 +71,7 @@ const EditPanel = (props) => {
       </EditWrapper>
     </EditContainer>
   )
+  
 }
 
 export default compose(

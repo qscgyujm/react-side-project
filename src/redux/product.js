@@ -35,7 +35,7 @@ export const action = {
   updateProduct: (id, body, resolve) => ({type: ActionType.UPDATE_PRODUCT_REQUEST, payload: { id: id, body: body, resolve: resolve }}),
   updateProductSuccess: (productList) => ({type: ActionType.UPDATE_PRODUCT_SUCCESS, payload: productList }),
   updateProductFailure: () => ({type: ActionType.UPDATE_PRODUCT_FAILURE}),
-  deleteProduct: () => ({type: ActionType.DELETE_PRODUCT_REQUEST}),
+  deleteProduct: (id) => ({type: ActionType.DELETE_PRODUCT_REQUEST, id}),
   deleteProductSuccess: (productList) => ({type: ActionType.DELETE_PRODUCT_SUCCESS, payload: productList}),
   deleteProductFailure: () => ({type: ActionType.DELETE_PRODUCT_FAILURE}),
 }
@@ -90,9 +90,15 @@ function* updateProductSaga({ payload }) {
   }
 }
 
-function* deleteProductSaga({}) {
+function* deleteProductSaga(payload) {
   try {
-    yield put(action.deleteProductSuccess());
+    const token = localStorage.getItem('token');
+    
+    const { data } = yield call(API.deleteProduct, {...payload , token});
+    const { productList } = data;
+    console.log('deleteProductSaga', productList);
+
+    yield put(action.deleteProductSuccess(productList));
   } catch (error) {
     yield put(action.deleteProductFailure());
   }
@@ -155,6 +161,24 @@ export const reducer = (state = initialState, action) => {
         isError: true,
       };
     case ActionType.UPDATE_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        productList: action.payload,
+        isFetch: false,
+      }
+    case ActionType.DELETE_PRODUCT_REQUEST:
+      return {
+        ...state,
+        isFetch: true,
+      };
+    case ActionType.DELETE_PRODUCT_FAILURE:
+      return {
+        ...state,
+        isFetch: false,
+        isError: true,
+      };
+    case ActionType.DELETE_PRODUCT_SUCCESS:
+      console.log('action.payload', action.payload);
       return {
         ...state,
         productList: action.payload,

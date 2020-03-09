@@ -22,9 +22,15 @@ const ProductWrapper = styled.div`
   background-color: #8a8a8a;
   border: solid 1px #8a8a8a;
   border-radius: 5px;
-  height: 450px;
+`;
+
+const CreateProductContainer = styled.div`
+  background-color: #8a8a8a;
+  border: solid 1px #8a8a8a;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
+  min-height: 520px;
 `;
 
 const CreateProductWrapper = styled.div`
@@ -74,7 +80,6 @@ const CreatePanel = (props) => {
 
 export default compose(
   withWrapper(ProductContainer),
-  withWrapper(ProductWrapper),
   (BaseComponent) => (props) => {
 
     const [localState, setLocalState] = React.useState(initialState())
@@ -106,20 +111,22 @@ export default compose(
 
     if(!isCreate){
       return (
-        <CreateProductWrapper>
-          <IconWrapper>
-            <AddIcon
-              src={AddIconSrc}
-              onClick={clickCreateButtonHandler}
-              alt='add'
-            />
-          </IconWrapper>
-        </CreateProductWrapper>
+        <CreateProductContainer>
+          <CreateProductWrapper>
+            <IconWrapper>
+              <AddIcon
+                src={AddIconSrc}
+                onClick={clickCreateButtonHandler}
+                alt='add'
+              />
+            </IconWrapper>
+          </CreateProductWrapper>
+        </CreateProductContainer>
       )
     }
 
     return(
-      <>
+      <ProductWrapper>
         <BaseComponent 
           {...props}
           localState={localState}
@@ -130,7 +137,7 @@ export default compose(
           <Button onClick={clickCancelButtonHandler} >取消</Button>
           <Button onClick={clickSaveButtonHandler}>儲存</Button>
         </ButtonWrapper>
-      </>
+      </ProductWrapper>
     )
   },
 )(CreatePanel);

@@ -13,7 +13,7 @@ import withWrapper from '../../hoc/withWrapper';
 import { LoginContainer } from '../../styles/layout'
 import { Button } from '../../styles/unit';
 import { Header } from './style/unit';
-
+import { Wrapper as LoadingWrapper } from '../Loading';
 import Profile from '../Profile/index'
 import Password from './view/Password';
 
@@ -29,6 +29,11 @@ const EditWrapper = styled.div`
   min-height: 300px;
   padding: 15px;
   border: 1px solid #316497;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 const ButtonWrapper = styled.div`
@@ -137,7 +142,11 @@ export default compose(
 
     if(isEmpty(profile)) {
       return(
-        <div>Empty</div>
+        <LoadingContainer>
+          <LoadingWrapper>
+            Empty
+          </LoadingWrapper>
+        </LoadingContainer>
       )
     }
 

@@ -87,7 +87,8 @@ const Home = (props) => {
         <ItemTitle>
           Password:
         </ItemTitle>
-        <ItemInput 
+        <ItemInput
+          type='password'
           value={localState.password}
           onChange={changePasswordHandler}
         />

@@ -9,10 +9,12 @@ import { Button } from '../../../styles/unit';
 import EditPanel from './EditPanel';
 
 const SettingWrapper = styled.div`
+  min-height: 200px;
   padding: 10px;
 `;
 
 const ProductInfoTitle = styled.p`
+  margin-bottom: 5px;
   font-size: 20px;
 `;
 
@@ -39,7 +41,7 @@ const ProductPanel = (props) => {
   return (
     <SettingWrapper>
       <SectionWrapper>
-        <ProductInfoTitle>產品名:</ProductInfoTitle>
+        <ProductInfoTitle>產品:</ProductInfoTitle>
         <ProductInfo>{name}</ProductInfo>
       </SectionWrapper>
       <SectionWrapper>

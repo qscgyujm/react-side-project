@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { compose } from 'recompose';
 
 import withWrapper from '../../../hoc/withWrapper'
+import withDeleteProduct from '../hoc/withDeleteProduct';
 
 import ProductImage from '../../Product/view/ProductImg';
 import SettingPanel from './SettingPanel';
@@ -44,4 +45,5 @@ const Product = (props) => {
 export default compose(
   withWrapper(ProductContainer),
   withWrapper(ProductWrapper),
+  withDeleteProduct,
 )(Product);

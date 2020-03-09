@@ -10,6 +10,7 @@ import { action as orderAction } from '../../redux/order';
 
 import withWrapper from '../../hoc/withWrapper';
 
+import Loading from '../Loading';
 import OrderItem from './view/OrderItem';
 import { LoginContainer } from '../../styles/layout'
 import { Button } from '../../styles/unit';
@@ -90,6 +91,12 @@ export default compose(
 
     const clickMoveToProductHandler = () => {
       history.push('/product');
+    }
+
+    if(isEmpty(orderList)) {
+      return(
+        <Loading />
+      )
     }
 
     return(

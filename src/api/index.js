@@ -54,6 +54,18 @@ export const updateProduct = ({id, body, token}) => {
   });
 }
 
+export const deleteProduct = (payload) => {
+  console.log(payload);
+  const { id, token } = payload;
+  return apiRoot.delete(`/product/${id}`, {
+    headers: {
+      Authorization: token,
+    }
+  })
+}
+
+// General
+
 export const uploadImg = (payload) => {
   console.log('api', payload);
   const { formData, token } = payload;
@@ -65,15 +77,6 @@ export const uploadImg = (payload) => {
     }
   })
 }
-
-// export const uploadBPProductFeaturesImage = (
-//   body: UploadBPProductFeaturesImageBody,
-// ) => apiRoot.post('/brands/product-features/images', body, {
-//   headers: {
-//     'content-type': 'multipart/form-data',
-//   },
-// });
-
 
 // Profile
 
