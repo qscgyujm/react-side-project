@@ -21,6 +21,7 @@ const ProductWrapper = styled.div`
   flex-wrap: wrap;
 `;
 
+
 const SettingProduct = (props) => {
   // const { productList } = props;
   console.log('SettingProduct', props.productList);
