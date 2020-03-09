@@ -78,7 +78,7 @@
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "deploy": "pm2 start ./server/server.js  --name pos-front --watch"
+    "deploy": "pm2 del pos-front && pm2 start ./server/server.js  --name pos-front --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
