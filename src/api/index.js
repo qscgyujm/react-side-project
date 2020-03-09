@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiRoot = axios.create({
-  baseURL: 'http://52.194.192.252:1337/',
+  baseURL: 'https://cors-anywhere.herokuapp.com/http://52.194.192.252:1337/',
 });
 
 // Auth
