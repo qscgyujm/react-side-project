@@ -20,7 +20,6 @@ import EditProfile from '../components/EditProfile'
 import GlobalStyle from '../styles/global';
 
 function App(props) {
-  console.log('App', props);
   const { isAuth, checkAuth } = props;
 
   React.useEffect(() => {
