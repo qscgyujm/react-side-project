@@ -22,11 +22,10 @@ const ProductWrapper = styled.div`
 `;
 
 const Product = (props) => {
+  console.log('product', props.product);
   const { product } = props;
 
-  const [localState, setLocalState] = React.useState({
-    ...product,
-  });
+  const [localState, setLocalState] = React.useState(product);
 
   return (
     <>

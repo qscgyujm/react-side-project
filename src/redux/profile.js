@@ -26,7 +26,7 @@ export const action = {
   fetchProfile: () => ({type: ActionType.FETCH_PROFILE_REQUEST}),
   fetchProfileFailure: () => ({type: ActionType.FETCH_PROFILE_FAILURE}),
   fetchProfileSuccess: (profile) => ({type: ActionType.FETCH_PROFILE_SUCCESS, payload: profile}),
-  updateProfile: (profile) => ({type: ActionType.UPDATE_PROFILE_REQUEST, profile}),
+  updateProfile: (profile, resolve) => ({type: ActionType.UPDATE_PROFILE_REQUEST, payload: { body: profile, resolve }}),
   updateProfileFailure: () => ({type: ActionType.UPDATE_PROFILE_FAILURE}),
   updateProfileSuccess: (profile) => ({type: ActionType.UPDATE_PROFILE_SUCCESS, payload: profile}),
   updatePassword: (passwordObj, resolve) => ({type: ActionType.UPDATE_PROFILE_PASSWORD_REQUEST, passwordObj, resolve}),
@@ -42,8 +42,6 @@ function* fetchProfileSaga() {
 
     const { data } = yield call(API.getProfile, token);
     const { profile } = data;
-    console.log('data', data, token);
-
 
      yield put(action.fetchProfileSuccess(profile));
   } catch (error) {
@@ -51,12 +49,17 @@ function* fetchProfileSaga() {
   }
 }
 
-function* updateProfileSaga(payload) {
+function* updateProfileSaga({payload}) {
   try {
     const token = localStorage.getItem('token');
 
-    const { data } = yield call(API.updateProfile, {...payload, token})
+    const { resolve, body } = payload;
+    const { data } = yield call(API.updateProfile, {body, token})
     const { profile } = data;
+
+  if(resolve) {
+    resolve();
+  }
 
     yield put(action.updateProfileSuccess(profile));
   } catch (error) {
@@ -66,7 +69,6 @@ function* updateProfileSaga(payload) {
 
 function* updateProfilePasswordSaga(payload) {
   try {
-    console.log('updateProfilePasswordSaga', payload);
     const token = localStorage.getItem('token');
     const { passwordObj, resolve } = payload;
 
@@ -105,7 +107,7 @@ export const reducer = (state = initialState, action) => {
     case ActionType.FETCH_PROFILE_SUCCESS:
       return {
         ...state,
-        profile: {...action.payload},
+        profile: action.payload,
         isFetch: false,
       }
     case ActionType.UPDATE_PROFILE_REQUEST:
@@ -121,7 +123,7 @@ export const reducer = (state = initialState, action) => {
     case ActionType.UPDATE_PROFILE_SUCCESS:
       return {
         ...state,
-        profile: {...action.payload},
+        profile: action.payload,
         isFetch: false,
       }
     case ActionType.UPDATE_PROFILE_PASSWORD_REQUEST:

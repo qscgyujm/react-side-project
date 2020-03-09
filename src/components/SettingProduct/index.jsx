@@ -26,8 +26,11 @@ const SettingProduct = (props) => {
   console.log('SettingProduct', props.productList);
 
   const productList = React.useMemo(
-    () => props.productList,[props.productList]
+    () => props.productList,
+    [props.productList],
   )
+
+  console.log(productList);
 
   return (
     <>

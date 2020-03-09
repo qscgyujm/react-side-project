@@ -47,6 +47,7 @@ const index = (props) => {
     profile,
     isEdit,
     setIsEdit,
+    updateProfile,
     clickEditProfileButtonHandler,
     clickChangePasswordButtonHandler,
   } = props;
@@ -59,6 +60,9 @@ const index = (props) => {
 
   const clickSubmitButtonHandler= () => {
     
+    const resolve = () => setIsEdit(false);
+
+    updateProfile(localProfile, resolve);
   }
 
   return (
@@ -70,6 +74,7 @@ const index = (props) => {
         localProfile={localProfile}
         setLocalProfile={setLocalProfile}
         isEdit={isEdit}
+        isInEdit
       />
       {
         isEdit
@@ -97,12 +102,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const {
     fetchProfile,
+    updateProfile,
     updatePassword,
   } = profileAction;
 
   return{
     ...bindActionCreators({
       fetchProfile,
+      updateProfile,
       updatePassword,
     }, dispatch),
   }

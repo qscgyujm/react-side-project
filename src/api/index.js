@@ -87,9 +87,8 @@ export const getProfile = (token) => {
     }
   });
 }
-export const updateProfile = ({profile, token}) => {
-  // console.log(profile, token);
-  return apiRoot.put('/user/profile', profile, {
+export const updateProfile = ({body, token}) => {
+  return apiRoot.put('/user/profile', body, {
     headers: {
       Authorization: token,
     }

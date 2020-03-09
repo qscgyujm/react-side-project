@@ -22,7 +22,13 @@ const SectionInput = styled.input`
 `;
 
 const Profile = (props) => {
-  const { localProfile, setLocalProfile, isEdit, isRegister } = props;
+  const { 
+    localProfile,
+    setLocalProfile,
+    isEdit,
+    isRegister,
+    isInEdit,
+  } = props;
   const { email, name, location } = localProfile;
 
   const changeEmailHandler = (e) => {
@@ -59,6 +65,7 @@ const Profile = (props) => {
         <SectionTitle>Email</SectionTitle>
         {
           !isEdit
+          || isInEdit
           ? (
             <SectionContent>
               {email}
