@@ -23,15 +23,7 @@ const ProductWrapper = styled.div`
 
 
 const SettingProduct = (props) => {
-  // const { productList } = props;
-  console.log('SettingProduct', props.productList);
-
-  const productList = React.useMemo(
-    () => props.productList,
-    [props.productList],
-  )
-
-  console.log(productList);
+  const { productList } = props;
 
   return (
     <>
@@ -86,13 +78,10 @@ export default compose(
   withWrapper(ProductWrapper),
   (BaseComponent) => (props) => {
     const { productList, fetchProduct } = props
-    console.log('SettingProduct', productList);
 
     React.useEffect(
       () => {
-        if(isEmpty(productList)) {
-          fetchProduct();
-        }
+        fetchProduct();
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],

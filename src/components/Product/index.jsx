@@ -30,6 +30,7 @@ const SellProductTable = (props) => {
     <>
       <CheckoutProduct 
         localOrder={localOrder}
+        setLocalOrder={setLocalOrder}
         productList={productList}
         createOrder={createOrder}
       />

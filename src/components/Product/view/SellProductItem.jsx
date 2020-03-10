@@ -37,7 +37,7 @@ const ProductName = styled.p`
 const SellProduct = (props) => {
   const { 
     product, 
-    localOrder, 
+    localOrder,
     clickAddButtonHandler, 
     clickMinusButtonHandler,
   } = props;

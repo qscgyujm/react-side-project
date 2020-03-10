@@ -1,8 +1,9 @@
 import axios from 'axios';
 
+const url = process.env.REACT_APP_LOCAL_URL ? process.env.REACT_APP_LOCAL_URL : process.env.REACT_APP_URL;
+
 const apiRoot = axios.create({
-  baseURL: 'http://52.194.192.252:1337/',
-  // baseURL: 'http://localhost:1337/',
+  baseURL: url,
 });
 
 // Auth

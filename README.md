@@ -1,6 +1,6 @@
 # test account & password
 - froggy@gmail.com
-- 1234
+- 123456
 
 # Feature
 ## Product
