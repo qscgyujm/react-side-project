@@ -56,7 +56,7 @@ function* fetchProductSaga() {
 function* createProductSaga({ payload }) {
   try {
     const token = localStorage.getItem('token');
-    
+
     const { resolve } = payload;
 
     const { data } = yield call(API.createProduct, { ...payload, token});
@@ -178,7 +178,6 @@ export const reducer = (state = initialState, action) => {
         isError: true,
       };
     case ActionType.DELETE_PRODUCT_SUCCESS:
-      console.log('action.payload', action.payload);
       return {
         ...state,
         productList: action.payload,

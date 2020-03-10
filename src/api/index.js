@@ -115,11 +115,11 @@ export const getOrderList = ({ token }) => {
   });
 }
 
-export const createOrder = ({payload, token}) => {
-  console.log(payload, token);
+export const createOrder = (payload) => {
+  console.log(payload);
   return apiRoot.post('/order/create', payload, {
     headers: {
-      Authorization: token,
+      Authorization: payload.token,
     }
   });
 }

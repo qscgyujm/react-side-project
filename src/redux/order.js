@@ -32,7 +32,7 @@ export const action = {
   fetchOrder: () => ({type: ActionType.FETCH_ORDER_REQUEST}),
   fetchOrderSuccess: (orderList) => ({type: ActionType.FETCH_ORDER_SUCCESS, payload: orderList }),
   fetchOrderFailure: () => ({type: ActionType.FETCH_ORDER_FAILURE}),
-  createOrder: (order) => ({type: ActionType.CREATE_ORDER_REQUEST, order}),
+  createOrder: (order, resolve) => ({type: ActionType.CREATE_ORDER_REQUEST, payload: {order, resolve}}),
   createOrderSuccess: () => ({type: ActionType.CREATE_ORDER_SUCCESS}),
   createOrderFailure: () => ({type: ActionType.CREATE_ORDER_FAILURE}),
   updateOrder: () => ({type: ActionType.UPDATE_ORDER_REQUEST}),
@@ -61,13 +61,18 @@ function* fetchOrderSaga() {
   }
 }
 
-function* createOrderSaga(payload) {
+function* createOrderSaga({payload}) {
   try {
     console.log('createOrderSaga', payload);
 
     const token = localStorage.getItem('token');
+    const { resolve } = payload;
 
-    yield call(API.createOrder, {payload, token})
+    yield call(API.createOrder, {...payload, token})
+
+    if(resolve) {
+      resolve();
+    }
 
     yield put(action.createOrderSuccess());
   } catch (error) {

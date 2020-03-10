@@ -118,7 +118,12 @@ export default compose(
     const history = useHistory();
 
     const clickSubmitOrderHandler = () => {
-      createOrder(localOrder);
+
+      const resolve = () => {
+        setLocalOrder([]);
+      }
+
+      createOrder(localOrder, resolve);
     }
 
     const clickCancelOrderHandler = () => {

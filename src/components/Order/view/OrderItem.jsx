@@ -33,17 +33,6 @@ const InfoWrapper = styled.div`
 const EditWrapper = styled.div`
 `;
 
-
-const DetailWrapper = styled.div`
-  display: flex;
-  :not(:last-of-type) {
-    margin-bottom: 10px;
-  }
-`;
-
-const DetailItem = styled.p`
-`;
-
 const OrderButton = styled(Button)`
   :not(:last-of-type) {
     margin-right: 15px;
@@ -57,7 +46,6 @@ const OrderItem = (props) => {
   const { 
     order_id,
     totalPrice,
-    detailOrder,
     createdAt,
   } = order;
 
@@ -76,38 +64,12 @@ const OrderItem = (props) => {
             {convertDateTime(createdAt)}
           </InfoWrapper>
         </ContentWrapper>
-        {/* <ContentWrapper>
-          訂單詳細資料:
-          <br/>
-          {
-            detailOrder.map((detail, i) => (
-              <DetailWrapper
-                key={i}
-              >
-                <DetailItem>
-                  產品: {detail.id}
-                </DetailItem>
-                <DetailItem>
-                  數量: {detail.quantity}
-                </DetailItem>
-                <DetailItem>
-                  價格: {detail.price}
-                </DetailItem>
-              </DetailWrapper>
-            ))
-          }
-        </ContentWrapper> */}
-        {/* <ContentWrapper>
-          建立時間: 
-          {convertDateTime(createdAt)}
-        </ContentWrapper> */}
         <EditWrapper>
           <OrderButton
             onClick={clickDeleteOrderHandler}
           >
             刪除
           </OrderButton>
-          <OrderButton>編輯</OrderButton>
           <OrderButton
             onClick={clickSubmitOrderHandler}
           >
@@ -130,9 +92,6 @@ export default compose(
       updateSubmitOrder(orderId);
     }
 
-    const clickEditOrderHandler = () => {
-    }
-
     const clickDeleteOrderHandler = () => {
       const { order_id : orderId } = order;
       deleteOrder(orderId);
@@ -142,7 +101,6 @@ export default compose(
       <BaseComponent
         {...props}
         clickSubmitOrderHandler={clickSubmitOrderHandler}
-        clickEditOrderHandler={clickEditOrderHandler}
         clickDeleteOrderHandler={clickDeleteOrderHandler}
       />
     )

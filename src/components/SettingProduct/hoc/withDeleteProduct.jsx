@@ -17,6 +17,13 @@ const DeleteButton = styled.div`
   height: 20px;
   text-align: center;
   padding-top: 3px;
+  transition: 1s;
+
+  :hover {
+    background-color: #F00;
+    color: #FFF;
+    transition: 0.5s;
+  }
 `;
 
 const withDeleteProduct = (
