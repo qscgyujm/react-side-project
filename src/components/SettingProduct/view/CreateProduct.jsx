@@ -81,7 +81,6 @@ const CreatePanel = (props) => {
 export default compose(
   withWrapper(ProductContainer),
   (BaseComponent) => (props) => {
-
     const [localState, setLocalState] = React.useState(initialState())
     const [isCreate, setIsCreate] =React.useState(false);
 
