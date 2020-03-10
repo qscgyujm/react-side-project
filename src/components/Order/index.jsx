@@ -1,3 +1,4 @@
+/* eslint react-hooks/rules-of-hooks: "off" */
 import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -27,7 +28,8 @@ const MoveButton = styled(Button)`
 `;
 
 const index = (props) => {
-  const { orderList, updateSubmitOrder, clickMoveToProductHandler } = props;
+  const { orderList, updateSubmitOrder, deleteOrder, clickMoveToProductHandler } = props;
+
   return (
     <>
       <ButtonWrapper>
@@ -43,6 +45,7 @@ const index = (props) => {
             <OrderItem
               key={i}
               order={order}
+              deleteOrder={deleteOrder}
               updateSubmitOrder={updateSubmitOrder}
             />
           ))
@@ -60,6 +63,7 @@ const mapDispatchToProps = (dispatch) => {
   const {
     fetchOrder,
     updateOrder,
+    deleteOrder,
     updateSubmitOrder,
   } = orderAction;
 
@@ -67,6 +71,7 @@ const mapDispatchToProps = (dispatch) => {
     ...bindActionCreators({
       fetchOrder,
       updateOrder,
+      deleteOrder,
       updateSubmitOrder,
     }, dispatch),
   }
@@ -81,9 +86,7 @@ export default compose(
 
     React.useEffect(
       () => {
-        if(isEmpty(orderList)) {
-          fetchOrder();
-        }
+        fetchOrder();
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],

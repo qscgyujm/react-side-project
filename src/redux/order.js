@@ -20,6 +20,9 @@ const ActionType = {
   UPDATE_ORDER_REQUEST: 'UPDATE_ORDER_REQUEST',
   UPDATE_ORDER_SUCCESS: 'UPDATE_ORDER_SUCCESS',
   UPDATE_ORDER_FAILURE: 'UPDATE_ORDER_FAILURE',
+  DELETE_ORDER_REQUEST: 'DELETE_ORDER_REQUEST',
+  DELETE_ORDER_SUCCESS: 'DELETE_ORDER_SUCCESS',
+  DELETE_ORDER_FAILURE: 'DELETE_ORDER_FAILURE',
   UPDATE_SUBMIT_ORDER_REQUEST: 'UPDATE_SUBMIT_ORDER_REQUEST',
   UPDATE_SUBMIT_ORDER_FAILURE: 'UPDATE_SUBMIT_ORDER_FAILURE',
   UPDATE_SUBMIT_ORDER_SUCCESS: 'UPDATE_SUBMIT_ORDER_SUCCESS',
@@ -32,9 +35,12 @@ export const action = {
   createOrder: (order) => ({type: ActionType.CREATE_ORDER_REQUEST, order}),
   createOrderSuccess: () => ({type: ActionType.CREATE_ORDER_SUCCESS}),
   createOrderFailure: () => ({type: ActionType.CREATE_ORDER_FAILURE}),
-  updateOrder: (orderId) => ({type: ActionType.UPDATE_ORDER_REQUEST, payload: orderId}),
+  updateOrder: () => ({type: ActionType.UPDATE_ORDER_REQUEST}),
   updateOrderSuccess: () => ({type: ActionType.UPDATE_ORDER_SUCCESS}),
   updateOrderFailure: () => ({type: ActionType.UPDATE_ORDER_FAILURE}),
+  deleteOrder: (orderId) => ({type: ActionType.DELETE_ORDER_REQUEST, payload: orderId}),
+  deleteOrderSuccess: (orderList) => ({type: ActionType.DELETE_ORDER_SUCCESS, payload: orderList}),
+  deleteOrderFailure: () => ({type: ActionType.DELETE_ORDER_FAILURE}),
   updateSubmitOrder: (orderId) => ({type: ActionType.UPDATE_SUBMIT_ORDER_REQUEST, payload: orderId}),
   updateSubmitOrderSuccess: (orderList) => ({type: ActionType.UPDATE_SUBMIT_ORDER_SUCCESS, payload: orderList}),
   updateSubmitOrderFailure: () => ({type: ActionType.UPDATE_SUBMIT_ORDER_FAILURE}),
@@ -46,10 +52,8 @@ function* fetchOrderSaga() {
   try {
     const token = localStorage.getItem('token');
 
-    console.log('fetchOrderSaga', token);
     const { data } = yield call(API.getOrderList, { token });
     const { orderDetailList } = data;
-    console.log('fetchOrderSaga', data);
 
     yield put(action.fetchOrderSuccess(orderDetailList));
   } catch (error) {
@@ -73,8 +77,6 @@ function* createOrderSaga(payload) {
 
 function* updateOrderSaga(payload) {
   try {
-    console.log('updateOrderSaga', payload);
-
     const token = localStorage.getItem('token');
 
     // yield call(API.updateSubmitOrder, {payload, token})
@@ -91,11 +93,29 @@ function* updateSubmitOrderSaga({payload}) {
 
     const token = localStorage.getItem('token');
 
-    yield call(API.updateSubmitOrder, {payload, token})
+    const { data } = yield call(API.updateSubmitOrder, {payload, token})
+    const { orderDetailList } = data;
+    console.log('orderDetailList', orderDetailList);
 
-    yield put(action.updateOrderSuccess());
+    yield put(action.updateSubmitOrderSuccess(orderDetailList));
   } catch (error) {
-    yield put(action.updateOrderFailure());
+    yield put(action.updateSubmitOrderFailure());
+  }
+}
+
+function* deleteOrderSaga({payload}) {
+  try {
+    console.log('deleteOrderSaga', payload);
+
+    const token = localStorage.getItem('token');
+    
+    const { data } = yield call(API.deleteOrder, {id: payload, token})
+    const { orderDetailList } = data;
+    console.log('data', data);
+
+    yield put(action.deleteOrderSuccess(orderDetailList));
+  } catch (error) {
+    yield put(action.deleteOrderFailure());
   }
 }
 
@@ -104,6 +124,7 @@ export const saga = [
   takeLatest(ActionType.CREATE_ORDER_REQUEST, createOrderSaga),
   takeLatest(ActionType.UPDATE_ORDER_REQUEST, updateOrderSaga),
   takeLatest(ActionType.UPDATE_SUBMIT_ORDER_REQUEST, updateSubmitOrderSaga),
+  takeLatest(ActionType.DELETE_ORDER_REQUEST, deleteOrderSaga),
 ];
 
 // Reducer
@@ -158,6 +179,24 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         isFetch: false,
+        orderList: action.payload,
+      }
+    case ActionType.DELETE_ORDER_REQUEST:
+      return {
+        ...state,
+        isFetch: true,
+      };
+    case ActionType.DELETE_ORDER_FAILURE:
+      return {
+        ...state,
+        isError: true,
+        isFetch: false,
+      };
+    case ActionType.DELETE_ORDER_SUCCESS:
+      return {
+        ...state,
+        isFetch: false,
+        orderList: action.payload,
       }
     default:
       return state;

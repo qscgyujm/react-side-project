@@ -53,7 +53,7 @@ const OrderButton = styled(Button)`
 const convertDateTime = (time) => format(new Date(time), 'yy/MM/dd HH:mm:ss');
 
 const OrderItem = (props) => {
-  const { order, clickSubmitOrderHandler, } = props;
+  const { order, clickSubmitOrderHandler, clickDeleteOrderHandler } = props;
   const { 
     order_id,
     totalPrice,
@@ -102,6 +102,11 @@ const OrderItem = (props) => {
           {convertDateTime(createdAt)}
         </ContentWrapper> */}
         <EditWrapper>
+          <OrderButton
+            onClick={clickDeleteOrderHandler}
+          >
+            刪除
+          </OrderButton>
           <OrderButton>編輯</OrderButton>
           <OrderButton
             onClick={clickSubmitOrderHandler}
@@ -116,7 +121,8 @@ const OrderItem = (props) => {
 
 export default compose(
   (BaseComponent) => (props) => {
-    const { order, updateSubmitOrder } = props;
+    console.log('props', props);
+    const { order, deleteOrder, updateSubmitOrder } = props;
         
     const clickSubmitOrderHandler = () => {
       const { order_id : orderId } = order;
@@ -125,7 +131,11 @@ export default compose(
     }
 
     const clickEditOrderHandler = () => {
-      
+    }
+
+    const clickDeleteOrderHandler = () => {
+      const { order_id : orderId } = order;
+      deleteOrder(orderId);
     }
 
     return(
@@ -133,6 +143,7 @@ export default compose(
         {...props}
         clickSubmitOrderHandler={clickSubmitOrderHandler}
         clickEditOrderHandler={clickEditOrderHandler}
+        clickDeleteOrderHandler={clickDeleteOrderHandler}
       />
     )
   },

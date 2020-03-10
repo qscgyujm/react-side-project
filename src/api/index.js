@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const apiRoot = axios.create({
-  baseURL: 'http://52.194.192.252:1337/',
+  // baseURL: 'http://52.194.192.252:1337/',
+  baseURL: 'http://localhost:1337/',
 });
 
 // Auth
@@ -126,6 +127,15 @@ export const createOrder = ({payload, token}) => {
 export const updateSubmitOrder = ({payload, token}) => {
   console.log('updateSubmitOrder',payload, token );
   return apiRoot.put(`/order/submit/${payload}`, null, {
+    headers: {
+      Authorization: token,
+    }
+  })
+}
+
+export const deleteOrder = ({id, token}) => {
+  console.log('updateSubmitOrder',id, token );
+  return apiRoot.delete(`/order/${id}`, {
     headers: {
       Authorization: token,
     }
