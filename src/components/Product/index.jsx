@@ -77,17 +77,23 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withWrapper(LoginContainer),
   (BaseComponent) => (props) => {
-    const { productList, fetchProduct } = props;
+    const { isFetch, productList, fetchProduct } = props;
 
     React.useEffect(
       () => {
-        if(isEmpty(productList)) {
-          fetchProduct();
-        }
+        fetchProduct();
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
     )
+
+    if(isFetch) {
+      return(
+        <Loading 
+          isLoading
+        />
+      )
+    }
 
     if(isEmpty(productList)) {
       return(

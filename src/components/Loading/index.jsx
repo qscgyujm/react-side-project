@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 const Container = styled.div`
   width: calc(100vw - 100px);
@@ -9,7 +9,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const animation = keyframes`
+const loadingAnimation = keyframes`
   from {
     color: #FFF;
     background-color: #000;
@@ -21,18 +21,46 @@ const animation = keyframes`
   }
 `
 
+const emptyAnimation = keyframes`
+  from {
+    color: #d34545;
+    background-color: #4cd6a5;
+  }
+
+  to {
+    color: #4cd6a5;
+    background-color: #d34545;
+  }
+`
+
 export const Wrapper = styled.div`
   border-radius: 25px;
   padding: 30px;
   font-size: 30px;
-  animation: ${animation}  2s linear infinite;
+  font-weight: 700;
+
+  ${props => props.isLoading 
+    ? css`
+      animation: ${loadingAnimation}  2s linear infinite;
+    `
+    : css`
+      animation: ${emptyAnimation}  2s linear infinite;
+    `}
+  
 `;
 
-const index = () => {
+const index = (props) => {
+  const { isLoading } = props;
   return (
     <Container>
-      <Wrapper>
-        Loading
+      <Wrapper
+        isLoading={isLoading}
+      >
+        {
+          isLoading
+            ? 'Loading'
+            : 'Empty'
+        }
       </Wrapper>
     </Container>
   )

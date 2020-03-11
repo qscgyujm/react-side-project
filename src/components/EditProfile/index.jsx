@@ -127,9 +127,7 @@ export default compose(
 
     React.useEffect(
       () => {
-        if(isEmpty(profile)) {
-          fetchProfile();
-        }
+        fetchProfile();
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],

@@ -77,7 +77,7 @@ export default compose(
   withWrapper(LoginContainer),
   withWrapper(ProductWrapper),
   (BaseComponent) => (props) => {
-    const { productList, fetchProduct } = props
+    const { isFetch, fetchProduct } = props
 
     React.useEffect(
       () => {
@@ -87,9 +87,11 @@ export default compose(
       [],
     )
 
-    if(isEmpty(productList)) {
+    if(isFetch){
       return(
-        <Loading />
+        <Loading 
+          isLoading
+        />
       )
     }
 

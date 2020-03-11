@@ -81,7 +81,7 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withWrapper(LoginContainer),
   (BaseComponent) => (props) => {
-    const { orderList, fetchOrder } = props;
+    const { isFetch, orderList, fetchOrder } = props;
     const history = useHistory();
 
     React.useEffect(
@@ -94,6 +94,14 @@ export default compose(
 
     const clickMoveToProductHandler = () => {
       history.push('/product');
+    }
+
+    if(isFetch) {
+      return(
+        <Loading 
+          isLoading
+        />
+      )
     }
 
     if(isEmpty(orderList)) {
