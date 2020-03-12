@@ -58,7 +58,7 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   (BaseComponent) => (props) => {
-    const { isAuth, checkAuth } = props;
+    const { isAuth, isFetch, checkAuth } = props;
 
     React.useEffect(() => {
       if(isNil(isAuth)){
@@ -67,6 +67,13 @@ export default compose(
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
     );
+
+    if(isFetch) {
+      return(
+        <>
+        </>
+      )
+    }
 
     return(
       <BaseComponent 

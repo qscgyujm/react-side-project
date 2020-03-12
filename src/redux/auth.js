@@ -68,7 +68,6 @@ function* checkAuthSaga() {
     ) {
       localStorage.removeItem('token');
     }
-    // console.log(error.response);
 
     yield put(action.checkAuthFailure());
   }
