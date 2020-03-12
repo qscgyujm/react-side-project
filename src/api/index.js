@@ -10,9 +10,9 @@ const apiRoot = axios.create({
 
 export const checkAuth = (token) => {
   console.log('api', token);
-  return apiRoot.post('/auth/checkAuth', null, {
+  return apiRoot.post('/auth/check', null, {
     headers: {
-      token: token,
+      Authorization: token,
     }
   })
 }

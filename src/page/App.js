@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch, useHistory } from "react-router-dom";
 import { connect } from 'react-redux'
 import { compose } from 'recompose';
 import { bindActionCreators } from 'redux';
@@ -19,17 +19,7 @@ import EditProfile from '../components/EditProfile'
 
 import GlobalStyle from '../styles/global';
 
-function App(props) {
-  const { isAuth, checkAuth } = props;
-
-  React.useEffect(() => {
-    if(isNil(isAuth)){
-      checkAuth();
-    }},
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
+function App() {
   return (
     <Router>
       <GlobalStyle />
@@ -67,4 +57,21 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
+  (BaseComponent) => (props) => {
+    const { isAuth, checkAuth } = props;
+
+    React.useEffect(() => {
+      if(isNil(isAuth)){
+        checkAuth();
+      }},
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
+    );
+
+    return(
+      <BaseComponent 
+        {...props}
+      />
+    )
+  },
 )(App);

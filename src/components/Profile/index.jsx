@@ -101,7 +101,8 @@ const Profile = (props) => {
         && (
           <SectionWrapper>
             <SectionTitle>Password</SectionTitle>
-            <SectionInput 
+            <SectionInput
+              type='password'
               value={localProfile.password}
               onChange={changePasswordHandler}
             />

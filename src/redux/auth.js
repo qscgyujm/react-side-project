@@ -51,21 +51,25 @@ export const action = {
 function* checkAuthSaga() {
   console.log('check Auth');
   try {
-    const oldToken = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-    if(!oldToken){
-      throw new Error('error');
+    if(!token) {
+      throw new Error('Emtpy');
     }
 
-    // const response = yield call(API.checkAuth, oldToken);
-    // console.log('response', response);
-
-    // const { headers } = response;
-    // const { token: newToken } = headers;
-    // localStorage.setItem('token', newToken);
+    yield call(API.checkAuth, token);
 
     yield put(action.checkAuthSuccess());
   } catch (error) {
+
+    if(
+      error.response
+      && error.response.status === 403
+    ) {
+      localStorage.removeItem('token');
+    }
+    // console.log(error.response);
+
     yield put(action.checkAuthFailure());
   }
 }
@@ -75,7 +79,7 @@ function* loginAuthSaga(input) {
     const { payload } = input;
     
     const response = yield call(API.postLogin, payload);
-    const { data, headers } = response;
+    const { headers } = response;
     const { token } = headers;
 
     if(!token) {
@@ -85,6 +89,8 @@ function* loginAuthSaga(input) {
       yield put(action.loginAuthSuccess());
     }
   } catch (error) {
+    localStorage.removeItem('token');
+
     yield put(action.loginAuthFailure());
   }
 }
@@ -204,6 +210,7 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         isError: true,
+        isFetch: false,
       };
     case ActionType.SEND_VERIFY_CODE_SUCCESS:
       return {
