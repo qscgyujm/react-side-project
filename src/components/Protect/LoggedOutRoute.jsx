@@ -13,7 +13,7 @@ const ProtectRoute = ({
   const { isAuth } = rest;
 
   if(isAuth) {
-    history.push('/setting_product');
+    history.push('/product');
   }
 
   return(
