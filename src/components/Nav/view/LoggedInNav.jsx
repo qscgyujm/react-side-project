@@ -33,7 +33,7 @@ const LogoutTag = styled.div`
 `;
 
 const loggedIn = (props) => {
-  const { linkList, logoutAuth } = props;
+  const { isAdmin, linkList, logoutAuth } = props;
 
   const clickLogoutHandler = () => {
     logoutAuth();
@@ -56,6 +56,16 @@ const loggedIn = (props) => {
               </PathWrapper>
             )
           })
+        }
+        {
+          isAdmin
+          && (
+            <Link to='setting_product'>
+              <LinkTag>
+                Setting Product
+              </LinkTag>
+            </Link>
+          )
         }
         <LogoutWrapper>
           <LogoutTag

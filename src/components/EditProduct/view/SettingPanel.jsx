@@ -35,8 +35,8 @@ const EditButton = styled(Button)`
 `;
 
 const ProductPanel = (props) => {
-  const { localState, clickEditButtonHandler } = props;
-  const { name, description, price } = localState;
+  const { product, clickEditButtonHandler } = props;
+  const { name, description, price } = product;
 
   return (
     <SettingWrapper>
@@ -70,7 +70,10 @@ const ProductPanel = (props) => {
 
 export default compose(
   (BaseComponent) => (props) => {
-    const [isEdit, setIsEdit] =React.useState(false);
+    const { product } = props;
+
+    const [localState, setLocalState] = React.useState(product);
+    const [isEdit, setIsEdit] = React.useState(false);
 
     const clickCancelButtonHandler = () => {
       setIsEdit(false);
@@ -81,7 +84,7 @@ export default compose(
     }
 
     const clickUpdatedButtonHandler = () => {
-      const { localState, updateProduct } = props;
+      const { updateProduct } = props;
 
       const updatedProduct = pick(localState, ['name', 'price']);
 
@@ -94,9 +97,11 @@ export default compose(
 
       const updatedId = localState.p_id;
       const updatedBody = pick(localState, ['name', 'description', 'price', 'imageUrl']);
-
-      const resolve = () => setIsEdit(false);
     
+      const resolve = () => {
+        setIsEdit(false);
+      }
+
       updateProduct(updatedId, updatedBody, resolve);
     }
 
@@ -104,7 +109,8 @@ export default compose(
       return (
         <>
           <EditPanel
-            {...props}
+            localState={localState}
+            setLocalState={setLocalState}
           />
           <ButtonWrapper>
             <EditButton onClick={clickCancelButtonHandler}>取消</EditButton>

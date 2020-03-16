@@ -1,41 +1,35 @@
-/* eslint react-hooks/rules-of-hooks: "off" */
 import React from 'react'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
+import styled from 'styled-components';
 import { compose } from 'recompose';
+import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { isEmpty } from 'lodash';
-import { useHistory } from 'react-router-dom';
 
-import { action as adminAction } from '../../redux/admin';
+import { action as productAction } from '../../redux/product';
 import { action as fileAction } from '../../redux/file';
 
 import withWrapper from '../../hoc/withWrapper';
 
-import ProductItem from '../EditProduct/view/ProductItem';
-import CreateProduct from './view/CreateProduct';
-import Loading from '../Loading';
 import { LoginContainer } from '../../styles/layout'
 
-const EnhanceLoginContainer = styled(LoginContainer)`
-  background-color: #4cd6a5;
-`;
+import Loading from '../Loading';
+import SettingProductItem from './view/ProductItem';
+import AddProduct from './view/AddProduct';
 
 const ProductWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
 
-const index = (props) => {
-  console.log('create', props);
-  const { productList } = props;
+
+const SettingProduct = (props) => {
+  const { productList } = props
 
   return (
     <>
       {
-        productList.map((product,i) => {
-          return (
-            <ProductItem 
+        productList.map((product, i) => {
+          return(
+            <SettingProductItem
               key={i}
               {...props}
               product={product}
@@ -43,7 +37,7 @@ const index = (props) => {
           )
         })
       }
-      <CreateProduct 
+      <AddProduct 
         {...props}
       />
     </>
@@ -51,20 +45,15 @@ const index = (props) => {
 }
 
 const mapStateToProps = (state) => {
-  const { isAdmin } = state.auth;
-  return {
-    ...state.admin,
-    isAdmin,
-  };
+  return state.product;
 }
 
 const mapDispatchToProps = (dispatch) => {
   const {
     fetchProduct,
-    createProduct,
-    updateProduct,
+    createAddProduct,
     deleteProduct,
-  } = adminAction;
+  } = productAction;
 
   const { 
     uploadImg,
@@ -73,8 +62,7 @@ const mapDispatchToProps = (dispatch) => {
   return{
     ...bindActionCreators({
       fetchProduct,
-      createProduct,
-      updateProduct,
+      createAddProduct,
       deleteProduct,
       uploadImg,
     }, dispatch),
@@ -83,12 +71,10 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withWrapper(EnhanceLoginContainer),
+  withWrapper(LoginContainer),
   withWrapper(ProductWrapper),
   (BaseComponent) => (props) => {
-    const { isFetching, isAdmin, productList, fetchProduct } = props
-
-    const history = useHistory();
+    const { isFetching, fetchProduct } = props
 
     React.useEffect(
       () => {
@@ -98,22 +84,12 @@ export default compose(
       [],
     )
 
-    if(isFetching) {
+    if(isFetching){
       return(
         <Loading 
           isLoading
         />
       )
-    }
-
-    if(isEmpty(productList)) {
-      return(
-        <Loading />
-      )
-    }
-
-    if(!isAdmin) {
-      history.push('/product')
     }
 
     return(
@@ -122,6 +98,5 @@ export default compose(
       />
     )
   },
-)(index)
-
+)(SettingProduct);
 

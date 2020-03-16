@@ -22,19 +22,16 @@ const ProductWrapper = styled.div`
 `;
 
 const Product = (props) => {
-  const { product } = props;
-
-  const [localState, setLocalState] = React.useState(product);
+  const { product, productList, deletedProducts } = props;
+  console.log('SettingProduct', product.name, productList, deletedProducts);
 
   return (
     <>
       <ProductImage
-        imageUrl={localState.imageUrl}
+        imageUrl={product.imageUrl}
       />
       <SettingPanel
         {...props}
-        localState={localState}
-        setLocalState={setLocalState}
       />
     </>
   )

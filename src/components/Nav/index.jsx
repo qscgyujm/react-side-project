@@ -59,8 +59,8 @@ const loggedInLink = [{
   path: '/order',
   name: 'Order',
 },{
-  path: '/setting_product',
-  name: 'Setting Product',
+  path: '/edit_product',
+  name: 'Edit Product',
 }, {
   path: '/edit_Profile',
   name: 'Edit Profile',
@@ -112,6 +112,7 @@ export default compose(
     if(isAuth){
       return(
         <LoggedInNav
+          {...props}
           linkList={loggedInLink}
           logoutAuth={logoutAuth}
         />

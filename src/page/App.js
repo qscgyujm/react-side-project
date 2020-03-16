@@ -14,8 +14,9 @@ import Login from '../components/Login';
 import RegisterProfile from '../components/RegisterProfile';
 import Product from '../components/Product';
 import Order from '../components/Order';
+import EditProduct from '../components/EditProduct';
+import EditProfile from '../components/EditProfile';
 import SettingProduct from '../components/SettingProduct';
-import EditProfile from '../components/EditProfile'
 
 import GlobalStyle from '../styles/global';
 
@@ -28,8 +29,9 @@ function App() {
         <ProtectLogoutRoute path="/register"  exact={true} component={RegisterProfile} />
         <ProtectLoginRoute path="/product" exact={true} component={Product} />
         <ProtectLoginRoute path="/order" exact={true} component={Order} />
-        <ProtectLoginRoute path="/setting_product" exact={true} component={SettingProduct} />
+        <ProtectLoginRoute path="/edit_product" exact={true} component={EditProduct} />
         <ProtectLoginRoute path="/edit_Profile" exact={true} component={EditProfile} />
+        <ProtectLoginRoute path="/setting_Product" exact={true} component={SettingProduct} />
       </Switch>
     </Router>
   );

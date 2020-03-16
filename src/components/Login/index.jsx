@@ -60,17 +60,22 @@ const LoginButton = styled(Button)`
   `}
 `;
 
+const LoginForm = styled.form`
+`;
+
 const Home = (props) => {
   const { 
     localState,
     changeEmailHandler,
     changePasswordHandler,
     clickCancelHandler,
-    clickConfirmHandler,
+    submitHandler,
   } = props;
 
   return (
-    <>
+    <LoginForm
+      onSubmit={submitHandler}
+    >
       <LoginTitle>
         Login
       </LoginTitle>
@@ -78,7 +83,7 @@ const Home = (props) => {
         <ItemTitle>
           Email:
         </ItemTitle>
-        <ItemInput 
+        <ItemInput
           value={localState.email}
           onChange={changeEmailHandler}
         />
@@ -101,12 +106,12 @@ const Home = (props) => {
           Cancel
         </LoginButton>
         <LoginButton
-          onClick={clickConfirmHandler}
+          type='submit'
         >
           Login
         </LoginButton>
       </ButtonWrapper>
-    </>
+    </LoginForm>
   )
 }
 
@@ -162,15 +167,20 @@ export default compose(
       })
     }
 
-    const clickConfirmHandler = () => {
-      
+    const submitHandler = (e) => {
+      e.preventDefault();
+
       const { loginAuth } = props;
 
       if(!every(localState)) {
         return;
       }
 
-      loginAuth(localState);
+      const formData = new FormData();
+      formData.append('email', localState.email);
+      formData.append('password', localState.password);
+
+      loginAuth(formData);
     }
 
 
@@ -181,7 +191,7 @@ export default compose(
         changeEmailHandler={changeEmailHandler}
         changePasswordHandler={changePasswordHandler}
         clickCancelHandler={clickCancelHandler}
-        clickConfirmHandler={clickConfirmHandler}
+        submitHandler={submitHandler}
       />
     )
   },

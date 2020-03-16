@@ -1,10 +1,11 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 
-import * as API from '../api/index';
+import API from '../api'
 
 // State
 const initialState = {
   isAuth: null,
+  isAdmin: null,
   isFetch: false,
   isError: false,
 }
@@ -30,9 +31,9 @@ const ActionType = {
 
 export const action = {
   checkAuth: () => ({type: ActionType.CHECK_AUTH_REQUEST}),
-  checkAuthSuccess: () => ({type: ActionType.CHECK_AUTH_SUCCESS}),
+  checkAuthSuccess: (isAdmin) => ({type: ActionType.CHECK_AUTH_SUCCESS, payload: isAdmin}),
   checkAuthFailure: () => ({type: ActionType.CHECK_AUTH_FAILURE}),
-  loginAuth: (body) => ({type: ActionType.LOGIN_AUTH_REQUEST, payload: body}),
+  loginAuth: (form) => ({type: ActionType.LOGIN_AUTH_REQUEST, payload: form}),
   loginAuthSuccess: () => ({type: ActionType.LOGIN_AUTH_SUCCESS}),
   loginAuthFailure: () => ({type: ActionType.LOGIN_AUTH_FAILURE}),
   logoutAuth: () => ({type: ActionType.LOGOUT_AUTH_REQUEST}),
@@ -54,12 +55,14 @@ function* checkAuthSaga() {
     const token = localStorage.getItem('token');
 
     if(!token) {
-      throw new Error('Emtpy');
+      throw new Error('Empty');
     }
 
-    yield call(API.checkAuth, token);
+    const { data } = yield call(API.checkAuth, token);
 
-    yield put(action.checkAuthSuccess());
+    console.log('check Auth', data);
+
+    yield put(action.checkAuthSuccess(data));
   } catch (error) {
 
     if(
@@ -73,10 +76,10 @@ function* checkAuthSaga() {
   }
 }
 
-function* loginAuthSaga(input) {
+function* loginAuthSaga(payload) {
   try {
-    const { payload } = input;
-    
+    console.log(payload);
+
     const response = yield call(API.postLogin, payload);
     const { headers } = response;
     const { token } = headers;
@@ -167,6 +170,7 @@ export const reducer = (state = initialState, action) => {
         ...state,
         isFetch: false,
         isAuth: true,
+        isAdmin: action.payload,
       }
       case ActionType.LOGIN_AUTH_REQUEST:
         return {

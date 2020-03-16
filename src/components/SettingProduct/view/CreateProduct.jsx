@@ -10,7 +10,7 @@ import withWrapper from '../../../hoc/withWrapper'
 import { Button } from '../../../styles/unit';
 
 import ProductImage from '../../Product/view/ProductImg';
-import EditPanel from './EditPanel';
+import EditPanel from '../../EditProduct/view/EditPanel';
 
 const ProductContainer = styled.div`
   width: 25%;
@@ -54,13 +54,6 @@ const ButtonWrapper = styled.div`
   justify-content: space-around;
 `;
 
-const initialState = () => ({
-  name: '',
-  description: '',
-  price: 1,
-  imageUrl: '',
-});
-
 const CreatePanel = (props) => {
   const { localState, setLocalState, uploadImg, } = props;
 
@@ -77,6 +70,13 @@ const CreatePanel = (props) => {
     </>
   )
 }
+
+const initialState = () => ({
+  name: '',
+  description: '',
+  price: 1,
+  imageUrl: '',
+});
 
 export default compose(
   withWrapper(ProductContainer),
