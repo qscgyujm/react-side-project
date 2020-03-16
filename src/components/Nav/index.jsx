@@ -51,7 +51,6 @@ const RegisterTag = styled.div`
   cursor: pointer;
 `;
 
-
 const loggedInLink = [{
   path: '/product',
   name: 'Product',
@@ -94,11 +93,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const {
     logoutAuth,
+    checkAuth,
   } = authAction;
 
   return{
     ...bindActionCreators({
       logoutAuth,
+      checkAuth,
     }, dispatch),
   }
 }
@@ -107,7 +108,16 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   withWrapper(NavContainer),
   (BaseComponent) => (props) => {
-    const { isAuth, logoutAuth } = props;
+    const { isAuth, logoutAuth, checkAuth } = props;
+
+    // React.useEffect(
+    //   () => {
+    //     console.log('Nav')
+    //     checkAuth();
+    //   },
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    //   [],
+    // )
 
     if(isAuth){
       return(

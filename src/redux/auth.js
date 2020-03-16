@@ -34,7 +34,7 @@ export const action = {
   checkAuthSuccess: (isAdmin) => ({type: ActionType.CHECK_AUTH_SUCCESS, payload: isAdmin}),
   checkAuthFailure: () => ({type: ActionType.CHECK_AUTH_FAILURE}),
   loginAuth: (form) => ({type: ActionType.LOGIN_AUTH_REQUEST, payload: form}),
-  loginAuthSuccess: () => ({type: ActionType.LOGIN_AUTH_SUCCESS}),
+  loginAuthSuccess: (isAdmin) => ({type: ActionType.LOGIN_AUTH_SUCCESS, payload: isAdmin}),
   loginAuthFailure: () => ({type: ActionType.LOGIN_AUTH_FAILURE}),
   logoutAuth: () => ({type: ActionType.LOGOUT_AUTH_REQUEST}),
   logoutAuthSuccess: () => ({type: ActionType.LOGOUT_AUTH_SUCCESS}),
@@ -81,14 +81,14 @@ function* loginAuthSaga(payload) {
     console.log(payload);
 
     const response = yield call(API.postLogin, payload);
-    const { headers } = response;
+    const { headers, data } = response;
     const { token } = headers;
 
     if(!token) {
       throw new Error('no token');
     } else {
       localStorage.setItem('token', token);
-      yield put(action.loginAuthSuccess());
+      yield put(action.loginAuthSuccess(data));
     }
   } catch (error) {
     localStorage.removeItem('token');
@@ -187,6 +187,7 @@ export const reducer = (state = initialState, action) => {
           ...state,
           isFetch: false,
           isAuth: true,
+          isAdmin: action.payload,
         }
     case ActionType.LOGOUT_AUTH_REQUEST:
       return {
@@ -202,7 +203,8 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         isFetch: false,
-        isAuth: false,
+        isAuth: null,
+        isAdmin: null,
       }
     case ActionType.SEND_VERIFY_CODE_REQUEST:
       return {

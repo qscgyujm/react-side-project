@@ -22,8 +22,7 @@ const ProductWrapper = styled.div`
 `;
 
 const Product = (props) => {
-  const { product, productList, deletedProducts } = props;
-  console.log('SettingProduct', product.name, productList, deletedProducts);
+  const { product } = props;
 
   return (
     <>

@@ -1,7 +1,6 @@
 import { apiRoot } from './apiRoot';
 
 export const checkAuth = (token) => {
-  console.log('api', token);
   return apiRoot.post('/auth/check', null, {
     headers: {
       Authorization: token,

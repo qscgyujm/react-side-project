@@ -64,6 +64,7 @@ export default compose(
 
     React.useEffect(() => {
       if(isNil(isAuth)){
+        console.log('App')
         checkAuth();
       }},
       // eslint-disable-next-line react-hooks/exhaustive-deps
